@@ -1,0 +1,52 @@
+const Footer = () => {
+  const sections = [
+    {
+      title: "Product",
+      links: ["Features", "Pricing", "FAQ"]
+    },
+    {
+      title: "Company",
+      links: ["About", "Blog", "Contact"]
+    },
+    {
+      title: "Legal",
+      links: ["Privacy", "Terms"]
+    }
+  ];
+
+  return (
+    <footer className="bg-muted py-12 px-4">
+      <div className="max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+          <div>
+            <h3 className="text-xl font-semibold mb-4">Ormozy</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Simple time tracking that helps you stay present and understand your work patterns.
+            </p>
+          </div>
+          
+          {sections.map((section) => (
+            <div key={section.title}>
+              <h4 className="font-semibold mb-4">{section.title}</h4>
+              <ul className="space-y-2">
+                {section.links.map((link) => (
+                  <li key={link}>
+                    <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                      {link}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+        
+        <div className="pt-8 border-t border-border text-center text-sm text-muted-foreground">
+          © 2025 Ormozy. All rights reserved.
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;
