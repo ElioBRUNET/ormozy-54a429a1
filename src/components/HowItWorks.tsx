@@ -18,9 +18,9 @@ const HowItWorks = () => {
   ];
 
   return (
-    <section className="py-16 px-4">
+    <section className="py-20 md:py-28 px-4">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-4xl font-semibold text-center mb-16">How it works</h2>
+        <h2 className="text-4xl md:text-5xl font-semibold text-center mb-20">How it works</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {steps.map((step) => (

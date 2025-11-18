@@ -1,8 +1,8 @@
 const WhyOrmozy = () => {
   return (
-    <section className="py-16 px-4">
+    <section className="py-20 md:py-28 px-4">
       <div className="max-w-3xl mx-auto">
-        <h2 className="text-4xl font-semibold text-center mb-8">Why Ormozy exists</h2>
+        <h2 className="text-4xl md:text-5xl font-semibold text-center mb-12">Why Ormozy exists</h2>
         
         <div className="space-y-6 text-lg leading-relaxed text-muted-foreground">
           <p>

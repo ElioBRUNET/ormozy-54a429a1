@@ -12,10 +12,10 @@ const Pricing = () => {
   ];
 
   return (
-    <section className="py-16 px-4 bg-muted">
+    <section className="py-20 md:py-28 px-4 bg-muted">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-4xl font-semibold text-center mb-4">Simple pricing</h2>
-        <p className="text-center text-muted-foreground mb-16">One plan. Everything included.</p>
+        <h2 className="text-4xl md:text-5xl font-semibold text-center mb-6">Simple pricing</h2>
+        <p className="text-center text-lg text-muted-foreground mb-20">One plan. Everything included.</p>
         
         <div className="max-w-md mx-auto">
           <div className="bg-background rounded-2xl p-8 border-2 border-border">

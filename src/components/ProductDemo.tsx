@@ -6,9 +6,9 @@ const ProductDemo = () => {
   ];
 
   return (
-    <section className="py-16 px-4 bg-muted">
+    <section className="py-20 md:py-28 px-4 bg-muted">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-4xl font-semibold text-center mb-16">See Ormozy in action</h2>
+        <h2 className="text-4xl md:text-5xl font-semibold text-center mb-20">See Ormozy in action</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {demos.map((demo) => (
