@@ -1,7 +1,10 @@
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 import ormozyMascots from "@/assets/ormozy-mascots.webp";
 
 const Hero = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="pt-12 pb-16 px-4 text-center">
       <div className="max-w-4xl mx-auto">
@@ -22,7 +25,7 @@ const Hero = () => {
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-          <Button size="lg" className="font-medium px-8">
+          <Button size="lg" className="font-medium px-8" onClick={() => navigate('/auth')}>
             Start Tracking
           </Button>
           <Button variant="outline" size="lg" className="font-medium px-8">
