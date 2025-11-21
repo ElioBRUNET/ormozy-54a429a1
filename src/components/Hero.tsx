@@ -24,12 +24,9 @@ const Hero = () => {
           Simple 15-minute check-ins that help you stay present and understand your work patterns
         </p>
         
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <div className="flex justify-center">
           <Button size="lg" className="font-medium px-8" onClick={() => navigate('/auth')}>
-            Start Tracking
-          </Button>
-          <Button variant="outline" size="lg" className="font-medium px-8">
-            Product Demo
+            Get Started
           </Button>
         </div>
       </div>
