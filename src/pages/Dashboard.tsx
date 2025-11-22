@@ -5,6 +5,7 @@ import { User } from "@supabase/supabase-js";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { LogOut } from "lucide-react";
 
 const Dashboard = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -62,8 +63,8 @@ const Dashboard = () => {
           <h1 className="text-2xl font-semibold text-foreground">Ormozy Dashboard</h1>
           <div className="flex items-center gap-4">
             <span className="text-sm text-muted-foreground">{user?.email}</span>
-            <Button variant="outline" onClick={handleSignOut}>
-              Sign Out
+            <Button variant="ghost" size="icon" onClick={handleSignOut} title="Sign Out">
+              <LogOut />
             </Button>
           </div>
         </div>
