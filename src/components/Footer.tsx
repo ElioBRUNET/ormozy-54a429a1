@@ -1,16 +1,29 @@
+import { Link } from "react-router-dom";
+
 const Footer = () => {
   const sections = [
     {
       title: "Product",
-      links: ["Features", "Pricing", "FAQ"]
+      links: [
+        { name: "Features", path: "#" },
+        { name: "Pricing", path: "#" },
+        { name: "FAQ", path: "#" }
+      ]
     },
     {
       title: "Company",
-      links: ["About", "Blog", "Contact"]
+      links: [
+        { name: "About", path: "#" },
+        { name: "Blog", path: "#" },
+        { name: "Contact", path: "#" }
+      ]
     },
     {
       title: "Legal",
-      links: ["Privacy", "Terms"]
+      links: [
+        { name: "Privacy", path: "/privacy" },
+        { name: "Terms", path: "/terms" }
+      ]
     }
   ];
 
@@ -30,10 +43,16 @@ const Footer = () => {
               <h4 className="font-semibold mb-4">{section.title}</h4>
               <ul className="space-y-2">
                 {section.links.map((link) => (
-                  <li key={link}>
-                    <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                      {link}
-                    </a>
+                  <li key={link.name}>
+                    {link.path.startsWith('/') ? (
+                      <Link to={link.path} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                        {link.name}
+                      </Link>
+                    ) : (
+                      <a href={link.path} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                        {link.name}
+                      </a>
+                    )}
                   </li>
                 ))}
               </ul>
