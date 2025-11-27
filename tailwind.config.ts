@@ -60,6 +60,8 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        "activity-block": "hsl(var(--activity-block))",
+        "activity-block-filled": "hsl(var(--activity-block-filled))",
       },
       borderRadius: {
         lg: "var(--radius)",
