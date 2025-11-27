@@ -18,29 +18,54 @@ const Auth = () => {
   const redirectUri = searchParams.get('redirect_uri');
 
   useEffect(() => {
+    // Get fresh redirect_uri from URL on each render
+    const currentRedirectUri = searchParams.get('redirect_uri');
+    console.log('Auth page loaded. Redirect URI:', currentRedirectUri);
+
     // Check if user is already logged in
     supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session && !redirectUri) {
-        navigate("/dashboard");
+      if (session) {
+        console.log('Existing session found');
+        // If there's a redirect URI from Electron app, redirect with tokens
+        if (currentRedirectUri && currentRedirectUri.startsWith('ormozy://')) {
+          console.log('Redirecting to Electron app with tokens');
+          const accessToken = session.access_token;
+          const refreshToken = session.refresh_token;
+          window.location.href = `${currentRedirectUri}?access_token=${encodeURIComponent(accessToken)}&refresh_token=${encodeURIComponent(refreshToken)}`;
+        } else {
+          // Normal web flow - go to dashboard
+          navigate("/dashboard");
+        }
       }
     });
 
-    // Listen for auth changes
+    // Listen for auth changes (handles OAuth callback and email/password login)
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (session) {
+      console.log('Auth state changed:', event);
+      
+      if (event === 'SIGNED_IN' && session) {
+        // Re-read redirect_uri from current URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirectUriFromUrl = urlParams.get('redirect_uri');
+        
+        console.log('User signed in. Redirect URI:', redirectUriFromUrl);
+        
         // If there's a custom redirect URI (from Electron app), redirect with tokens
-        if (redirectUri) {
+        if (redirectUriFromUrl && redirectUriFromUrl.startsWith('ormozy://')) {
+          console.log('Redirecting to Electron app with tokens');
           const accessToken = session.access_token;
           const refreshToken = session.refresh_token;
-          window.location.href = `${redirectUri}?access_token=${accessToken}&refresh_token=${refreshToken}`;
+          window.location.href = `${redirectUriFromUrl}?access_token=${encodeURIComponent(accessToken)}&refresh_token=${encodeURIComponent(refreshToken)}`;
         } else {
+          // Normal web flow
+          console.log('Redirecting to dashboard');
           navigate("/dashboard");
         }
       }
     });
 
     return () => subscription.unsubscribe();
-  }, [navigate, redirectUri]);
+  }, [navigate, searchParams]);
 
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,19 +73,26 @@ const Auth = () => {
 
     try {
       if (isLogin) {
-        const { error } = await supabase.auth.signInWithPassword({
+        const { data, error } = await supabase.auth.signInWithPassword({
           email,
           password,
         });
 
         if (error) throw error;
 
+        console.log('Email login successful');
+        
+        // onAuthStateChange will handle the redirect
         toast({
           title: "Welcome back!",
           description: "Successfully logged in.",
         });
       } else {
-        const redirectUrl = `${window.location.origin}/dashboard`;
+        // For signup, preserve redirect_uri in the email confirmation link
+        const currentRedirectUri = searchParams.get('redirect_uri');
+        const redirectUrl = currentRedirectUri
+          ? `${window.location.origin}/auth?redirect_uri=${encodeURIComponent(currentRedirectUri)}`
+          : `${window.location.origin}/dashboard`;
         
         const { error } = await supabase.auth.signUp({
           email,
@@ -91,9 +123,16 @@ const Auth = () => {
   const handleGoogleLogin = async () => {
     setLoading(true);
     try {
-      const finalRedirectTo = redirectUri 
-        ? `${window.location.origin}/auth?redirect_uri=${encodeURIComponent(redirectUri)}`
+      const currentRedirectUri = searchParams.get('redirect_uri');
+      
+      console.log('Starting Google OAuth. Redirect URI:', currentRedirectUri);
+      
+      // Preserve redirect_uri through OAuth callback
+      const finalRedirectTo = currentRedirectUri && currentRedirectUri.startsWith('ormozy://')
+        ? `${window.location.origin}/auth?redirect_uri=${encodeURIComponent(currentRedirectUri)}`
         : `${window.location.origin}/dashboard`;
+      
+      console.log('OAuth redirectTo:', finalRedirectTo);
       
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
