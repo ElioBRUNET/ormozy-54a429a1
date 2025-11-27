@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { LogOut } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
+import { LogOut, Calendar as CalendarIcon, Clock, Activity } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { format, startOfDay, endOfDay } from "date-fns";
+import { cn } from "@/lib/utils";
 
 type WorkLog = {
   id: string;
@@ -21,11 +24,11 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [workLogs, setWorkLogs] = useState<WorkLog[]>([]);
   const [loadingLogs, setLoadingLogs] = useState(true);
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
-    // Check authentication
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!session) {
         navigate("/auth");
@@ -48,15 +51,25 @@ const Dashboard = () => {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
+  useEffect(() => {
+    if (user) {
+      fetchWorkLogs();
+    }
+  }, [selectedDate, user]);
+
   const fetchWorkLogs = async () => {
     try {
       setLoadingLogs(true);
       
-      // RLS policies automatically filter by user_id = auth.uid()
+      const startDate = startOfDay(selectedDate);
+      const endDate = endOfDay(selectedDate);
+
       const { data, error } = await supabase
         .from('work_logs')
         .select('*')
-        .order('created_at', { ascending: false });
+        .gte('created_at', startDate.toISOString())
+        .lte('created_at', endDate.toISOString())
+        .order('created_at', { ascending: true });
 
       if (error) {
         console.error('Error fetching work logs:', error);
@@ -67,7 +80,6 @@ const Dashboard = () => {
         });
       } else {
         setWorkLogs(data || []);
-        console.log('Fetched work logs:', data);
       }
     } catch (error) {
       console.error('Unexpected error:', error);
@@ -87,119 +99,171 @@ const Dashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-muted-foreground">Loading...</div>
       </div>
     );
   }
 
-  // Generate hours from 6am to 8pm
   const hours = Array.from({ length: 15 }, (_, i) => i + 6);
+  
+  const getLogsForHour = (hour: number) => {
+    return workLogs.filter(log => {
+      const logHour = new Date(log.created_at).getHours();
+      return logHour === hour;
+    });
+  };
+
+  const totalActivities = workLogs.length;
+  const activeHours = new Set(workLogs.map(log => new Date(log.created_at).getHours())).size;
 
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b border-border">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-semibold text-foreground">Ormozy Dashboard</h1>
+      <header className="border-b border-border bg-card">
+        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+          <div>
+            <h1 className="text-2xl font-semibold text-foreground">Ormozy</h1>
+            <p className="text-sm text-muted-foreground">Time Tracking Dashboard</p>
+          </div>
           <div className="flex items-center gap-4">
-            <span className="text-sm text-muted-foreground">{user?.email}</span>
+            <span className="text-sm text-muted-foreground hidden sm:block">{user?.email}</span>
             <Button variant="ghost" size="icon" onClick={handleSignOut} title="Sign Out">
-              <LogOut />
+              <LogOut className="h-5 w-5" />
             </Button>
           </div>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Work Logs Section */}
-          <div className="lg:col-span-2">
+      <main className="container mx-auto px-6 py-8">
+        {/* Analytics Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <Card className="border-border bg-card">
+            <CardContent className="pt-6">
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground mb-1">Total Activities</p>
+                  <p className="text-4xl font-semibold text-foreground">{totalActivities}</p>
+                </div>
+                <div className="p-3 bg-accent/20 rounded-lg">
+                  <Activity className="h-6 w-6 text-accent-foreground" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-border bg-card">
+            <CardContent className="pt-6">
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground mb-1">Active Hours</p>
+                  <p className="text-4xl font-semibold text-foreground">{activeHours}</p>
+                </div>
+                <div className="p-3 bg-primary/20 rounded-lg">
+                  <Clock className="h-6 w-6 text-primary" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-border bg-card">
+            <CardContent className="pt-6">
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground mb-1">Selected Date</p>
+                  <p className="text-lg font-medium text-foreground mt-2">
+                    {format(selectedDate, "MMM dd, yyyy")}
+                  </p>
+                </div>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline" size="icon" className="bg-secondary">
+                      <CalendarIcon className="h-5 w-5" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="end">
+                    <Calendar
+                      mode="single"
+                      selected={selectedDate}
+                      onSelect={(date) => date && setSelectedDate(date)}
+                      initialFocus
+                      className="pointer-events-auto"
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Time Management Section */}
+        <Card className="border-border bg-card">
+          <CardContent className="p-6">
             <div className="mb-6">
-              <h2 className="text-xl font-semibold mb-2">Your Work Logs</h2>
+              <h2 className="text-xl font-semibold text-foreground mb-1">Time Management</h2>
               <p className="text-sm text-muted-foreground">
-                Track and review your activity logs
+                {format(selectedDate, "EEEE, MMMM dd, yyyy")}
               </p>
             </div>
 
             {loadingLogs ? (
-              <div className="space-y-3">
-                {[1, 2, 3].map((i) => (
-                  <Skeleton key={i} className="h-24 w-full" />
-                ))}
-              </div>
-            ) : workLogs.length === 0 ? (
-              <div className="rounded-lg border border-border p-8 text-center">
-                <p className="text-muted-foreground">No work logs yet. Start tracking your activities!</p>
+              <div className="flex items-center justify-center py-12">
+                <div className="text-muted-foreground">Loading activities...</div>
               </div>
             ) : (
-              <ScrollArea className="h-[calc(100vh-250px)]">
-                <div className="space-y-3 pr-4">
-                  {workLogs.map((log) => (
-                    <div
-                      key={log.id}
-                      className="rounded-lg border border-border bg-card p-4 hover:bg-accent/5 transition-colors"
-                    >
-                      <p className="text-sm text-foreground mb-2">{log.content}</p>
-                      <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                        <span>
-                          {new Date(log.created_at).toLocaleDateString("en-US", {
-                            month: "short",
-                            day: "numeric",
-                            year: "numeric",
-                          })}
+              <div className="space-y-4">
+                {hours.map((hour) => {
+                  const hourLogs = getLogsForHour(hour);
+                  const blocks = Array.from({ length: 4 }, (_, i) => i);
+                  
+                  return (
+                    <div key={hour} className="flex gap-4 items-start group">
+                      <div className="w-20 flex-shrink-0 pt-2">
+                        <span className="text-sm font-medium text-foreground">
+                          {hour === 12 ? "12 PM" : hour > 12 ? `${hour - 12} PM` : `${hour} AM`}
                         </span>
-                        <span>
-                          {new Date(log.created_at).toLocaleTimeString("en-US", {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
-                        </span>
+                        <p className="text-xs text-muted-foreground">
+                          {hourLogs.length} {hourLogs.length === 1 ? 'log' : 'logs'}
+                        </p>
+                      </div>
+
+                      <div className="flex-1 grid grid-cols-4 gap-2">
+                        {blocks.map((blockIndex) => {
+                          const log = hourLogs[blockIndex];
+                          const isEmpty = !log;
+                          
+                          return (
+                            <div
+                              key={blockIndex}
+                              className={cn(
+                                "h-16 rounded-lg border-2 transition-all duration-200",
+                                isEmpty
+                                  ? "border-dashed border-border bg-[hsl(var(--activity-block))] hover:bg-muted/50 cursor-pointer"
+                                  : "border-solid border-primary/30 bg-[hsl(var(--activity-block-filled))]/10 hover:bg-[hsl(var(--activity-block-filled))]/20 cursor-pointer"
+                              )}
+                              title={log ? log.content : "Empty slot"}
+                            >
+                              {!isEmpty && (
+                                <div className="p-2 h-full flex flex-col justify-between">
+                                  <p className="text-xs text-foreground line-clamp-2 font-medium">
+                                    {log.content}
+                                  </p>
+                                  <span className="text-[10px] text-muted-foreground">
+                                    {format(new Date(log.created_at), "HH:mm")}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
-                  ))}
-                </div>
-              </ScrollArea>
-            )}
-          </div>
-
-          {/* Schedule Section */}
-          <div className="lg:col-span-1">
-            <div className="mb-6">
-              <h2 className="text-xl font-semibold mb-2">Today's Schedule</h2>
-              <p className="text-sm text-muted-foreground">
-                {new Date().toLocaleDateString("en-US", { 
-                  weekday: "long", 
-                  month: "short", 
-                  day: "numeric" 
+                  );
                 })}
-              </p>
-            </div>
-
-            <ScrollArea className="h-[calc(100vh-250px)] rounded-lg border border-border">
-              <div className="p-4 space-y-4">
-                {hours.map((hour) => (
-                  <div key={hour} className="flex gap-4">
-                    {/* Time Label */}
-                    <div className="w-16 flex-shrink-0 pt-2">
-                      <span className="text-xs font-medium text-foreground">
-                        {hour === 12 ? "12PM" : hour > 12 ? `${hour - 12}PM` : `${hour}AM`}
-                      </span>
-                    </div>
-
-                    {/* Activity Block */}
-                    <div className="flex-1">
-                      <div
-                        className="h-12 rounded-md border-2 border-dashed border-border bg-muted/30 hover:bg-muted/50 transition-colors cursor-pointer"
-                      />
-                    </div>
-                  </div>
-                ))}
               </div>
-            </ScrollArea>
-          </div>
-        </div>
+            )}
+          </CardContent>
+        </Card>
       </main>
     </div>
   );
