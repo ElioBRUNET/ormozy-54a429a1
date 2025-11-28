@@ -128,4 +128,37 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
     font-family: 'Poppins', sans-serif;
   }
+
+  /* Letter spacing adjustments - more reduction for larger text */
+  h1, .text-7xl, .text-6xl, .text-5xl {
+    letter-spacing: -0.04em;
+  }
+
+  .text-4xl {
+    letter-spacing: -0.03em;
+  }
+
+  h2, .text-3xl {
+    letter-spacing: -0.025em;
+  }
+
+  .text-2xl {
+    letter-spacing: -0.02em;
+  }
+
+  h3, .text-xl {
+    letter-spacing: -0.015em;
+  }
+
+  .text-lg {
+    letter-spacing: -0.01em;
+  }
+
+  p, body, .text-base {
+    letter-spacing: -0.005em;
+  }
+
+  .text-sm {
+    letter-spacing: -0.003em;
+  }
 }
