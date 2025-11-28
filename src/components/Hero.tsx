@@ -14,7 +14,7 @@ const Hero = () => {
           <img src={logo} alt="Ormozy" className="h-24 w-24 sm:h-28 sm:w-28 md:h-32 md:w-32 animate-appear" />
           
           {/* Badge */}
-          <Badge variant="outline" className="animate-appear gap-2">
+          <Badge variant="outline" className="animate-appear gap-2 text-xs sm:text-sm">
             <span className="text-muted-foreground">For people who lose track of time</span>
             <a href="#benefits" className="flex items-center gap-1">
               Learn more
@@ -23,15 +23,15 @@ const Hero = () => {
           </Badge>
 
           {/* Title */}
-          <h1 className="relative z-10 inline-block animate-appear bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-4xl font-semibold leading-tight text-transparent drop-shadow-2xl sm:text-6xl sm:leading-tight md:text-7xl md:leading-tight">
+          <h1 className="relative z-10 animate-appear bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-3xl font-semibold leading-tight text-transparent drop-shadow-2xl sm:text-5xl sm:leading-tight md:text-7xl md:leading-tight px-4">
             <span className="whitespace-nowrap">No more "Where the fu**k</span><br />
             did my day go"
           </h1>
 
           {/* Actions */}
           <div className="relative z-10 flex animate-appear justify-center gap-4 opacity-0 delay-300">
-            <Button size="lg" onClick={() => navigate('/auth')}>
-              <Clock className="mr-2 h-4 w-4" />
+            <Button size="lg" className="text-base sm:text-lg" onClick={() => navigate('/auth')}>
+              <Clock className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
               Get Started
             </Button>
           </div>
