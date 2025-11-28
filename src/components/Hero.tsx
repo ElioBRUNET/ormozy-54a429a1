@@ -4,11 +4,15 @@ import { useNavigate } from "react-router-dom";
 import { ArrowRight, Clock } from "lucide-react";
 import { Glow } from "@/components/ui/glow";
 import { cn } from "@/lib/utils";
+import logo from "@/assets/logo.png";
 const Hero = () => {
   const navigate = useNavigate();
   return <section className={cn("bg-background text-foreground", "py-12 sm:py-16 md:py-20 px-4", "overflow-hidden pb-0")}>
       <div className="mx-auto flex max-w-6xl flex-col gap-8 pt-8 sm:gap-12">
         <div className="flex flex-col items-center gap-4 text-center sm:gap-8">
+          {/* Logo */}
+          <img src={logo} alt="Ormozy" className="h-16 w-16 sm:h-20 sm:w-20 animate-appear" />
+          
           {/* Badge */}
           <Badge variant="outline" className="animate-appear gap-2">
             <span className="text-muted-foreground">For people who lose track of time</span>
