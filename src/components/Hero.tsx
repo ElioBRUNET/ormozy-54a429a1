@@ -24,14 +24,9 @@ const Hero = () => {
 
           {/* Title */}
           <h1 className="relative z-10 inline-block animate-appear bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-4xl font-semibold leading-tight text-transparent drop-shadow-2xl sm:text-6xl sm:leading-tight md:text-7xl md:leading-tight">
-            No more "Where the fu**k<br />did my day go"
+            <span className="whitespace-nowrap">No more "Where the fu**k</span><br />
+            did my day go"
           </h1>
-
-          {/* Description */}
-          <p className="text-md relative z-10 max-w-[550px] animate-appear text-muted-foreground opacity-0 delay-100 sm:text-xl font-normal">
-            Simple 15-minute check-ins that help you stay present and understand your work patterns.
-            <span className="block mt-2 text-foreground font-medium">No complex timers. No friction.</span>
-          </p>
 
           {/* Actions */}
           <div className="relative z-10 flex animate-appear justify-center gap-4 opacity-0 delay-300">
