@@ -9,7 +9,7 @@ const FinalCTA = () => {
   return (
     <section className={cn("group relative overflow-hidden py-20 sm:py-24")}>
       <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center gap-6 text-center sm:gap-8 px-4">
-        <h2 className="text-3xl font-semibold sm:text-5xl animate-appear">
+        <h2 className="text-2xl font-semibold sm:text-4xl md:text-5xl animate-appear">
           Start understanding your day
         </h2>
         <Button 
