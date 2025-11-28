@@ -12,7 +12,7 @@ const Hero = () => {
         <div className="mb-6 flex justify-center items-center gap-2">
           <Sparkles className="w-5 h-5 text-primary" />
           <span className="text-sm font-medium text-muted-foreground">
-            Built by Alex (🧔🏻‍♂️) for people who lose track of time
+            For people who lose track of time
           </span>
         </div>
 

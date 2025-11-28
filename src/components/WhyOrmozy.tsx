@@ -17,7 +17,7 @@ const WhyOrmozy = () => {
       id: "story",
       icon: Heart,
       title: "The story behind Ormozy",
-      content: "Alex (yes, HIM 🧔🏻‍♂️) built this after realizing he had no idea where his days went. Every evening felt like a blur. Sound familiar? Most time tracking tools are built for billing or management—heavy, complex, easy to ignore. Ormozy is different. It's built for you."
+      content: "Built after realizing days were disappearing without a trace. Every evening felt like a blur. Sound familiar? Most time tracking tools are built for billing or management—heavy, complex, easy to ignore. Ormozy is different. It's built for you."
     },
     {
       id: "philosophy",
@@ -38,7 +38,7 @@ const WhyOrmozy = () => {
       <div className="max-w-4xl mx-auto">
         <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">Why Ormozy exists</h2>
         <p className="text-center text-muted-foreground mb-12 text-lg">
-          Spoiler: It's personal 🧔🏻‍♂️
+          Spoiler: It's personal
         </p>
         
         <div className="space-y-4">

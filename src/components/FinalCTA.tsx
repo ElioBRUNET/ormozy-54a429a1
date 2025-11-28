@@ -18,10 +18,7 @@ const FinalCTA = () => {
               Start understanding your day
             </h2>
             <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Join the people who've discovered the power of simple, consistent time awareness. 
-              <span className="block mt-2 text-foreground font-medium">
-                (Alex is one of them. It works. 🧔🏻‍♂️)
-              </span>
+              Join the people who've discovered the power of simple, consistent time awareness.
             </p>
             <Button size="lg" className="px-10" onClick={() => navigate('/auth')}>
               Begin Your Free Trial <Clock className="ml-2 w-5 h-5" />
