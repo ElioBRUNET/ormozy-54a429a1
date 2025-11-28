@@ -7,7 +7,7 @@ const FinalCTA = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="py-20 md:py-28 px-4">
+    <section className="py-12 md:py-20 px-4">
       <div className="max-w-4xl mx-auto">
         <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10">
           <CardContent className="p-12 text-center">
