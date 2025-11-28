@@ -42,8 +42,8 @@ const PricingAndWhy = () => {
       <div className="max-w-7xl mx-auto">
         {/* Unified Section Header */}
         <div className="text-center mb-12 md:mb-16">
-          <h2 className="text-4xl md:text-5xl mb-4 font-semibold">Ready to get started?</h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-normal">
+          <h2 className="text-2xl md:text-4xl lg:text-5xl mb-4 font-semibold">Ready to get started?</h2>
+          <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto font-normal">
             Simple pricing. Clear mission. Built for you.
           </p>
         </div>
