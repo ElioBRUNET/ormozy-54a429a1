@@ -26,9 +26,9 @@ const FeaturesUnified = () => {
   ];
 
   return (
-    <section className="py-20 md:py-28 px-4">
+    <section className="py-12 md:py-20 px-4">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
+        <div className="text-center mb-12 md:mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">Everything you need to track your time</h2>
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
             Simple, effortless, and designed to help you understand how you spend your day.

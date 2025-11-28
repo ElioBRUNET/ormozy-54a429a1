@@ -57,17 +57,20 @@ const PricingAndWhy = () => {
   ];
 
   return (
-    <section className="py-20 md:py-28 px-4 relative overflow-hidden bg-muted/30">
+    <section className="py-12 md:py-20 px-4 relative overflow-hidden bg-muted/30">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+        {/* Unified Section Header */}
+        <div className="text-center mb-12 md:mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold mb-4">Ready to get started?</h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Simple pricing. Clear mission. Built for you.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
           {/* Pricing Card */}
           <div className="flex flex-col">
-            <div className="text-center lg:text-left mb-8">
-              <h2 className="text-4xl md:text-5xl font-bold mb-4">Simple pricing</h2>
-              <p className="text-lg text-muted-foreground">
-                One plan. Everything included.
-              </p>
-            </div>
+            <h3 className="text-2xl font-bold mb-6 text-center lg:text-left">Simple pricing</h3>
             <div className="flex justify-center lg:justify-start">
               <PricingCard.Card>
                 <PricingCard.Header>
@@ -113,12 +116,7 @@ const PricingAndWhy = () => {
 
           {/* Why Ormozy */}
           <div className="flex flex-col">
-            <div className="text-center lg:text-left mb-8">
-              <h2 className="text-4xl md:text-5xl font-bold mb-4">Why Ormozy exists</h2>
-              <p className="text-lg text-muted-foreground">
-                Spoiler: It's personal
-              </p>
-            </div>
+            <h3 className="text-2xl font-bold mb-6 text-center lg:text-left">Why Ormozy exists</h3>
             <FaqAccordion 
               data={faqData}
               className="max-w-full"
