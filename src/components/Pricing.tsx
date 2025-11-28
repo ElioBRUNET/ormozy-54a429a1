@@ -1,46 +1,88 @@
-import { Button } from "@/components/ui/button";
-import { Check } from "lucide-react";
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import * as PricingCard from '@/components/ui/pricing-card';
+import { CheckCircle2, Clock } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Pricing = () => {
+  const navigate = useNavigate();
+
   const features = [
-    "15-minute interval notifications",
-    "Quick logging interface",
-    "Daily and weekly summaries",
-    "Work pattern insights",
-    "Export your data anytime",
-    "Available on all devices"
+    '15-minute interval notifications',
+    'Quick logging interface',
+    'Daily and weekly summaries',
+    'Work pattern insights',
+    'Export your data anytime',
+    'Available on all devices',
   ];
 
   return (
-    <section className="py-20 md:py-28 px-4 bg-muted">
+    <section className="py-20 md:py-28 px-4 relative overflow-hidden">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-4xl md:text-5xl font-semibold text-center mb-6">Simple pricing</h2>
-        <p className="text-center text-lg text-muted-foreground mb-20">One plan. Everything included.</p>
-        
-        <div className="max-w-md mx-auto">
-          <div className="bg-background rounded-2xl p-8 border-2 border-border">
-            <h3 className="text-2xl font-semibold mb-2">Ormozy Pro</h3>
-            <div className="mb-6">
-              <span className="text-5xl font-bold">$8</span>
-              <span className="text-muted-foreground">/month</span>
-            </div>
-            <p className="text-sm text-muted-foreground mb-6">14-day free trial</p>
-            
-            <div className="space-y-4 mb-8">
-              {features.map((feature) => (
-                <div key={feature} className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-foreground flex-shrink-0 mt-0.5" />
-                  <span className="text-sm">{feature}</span>
-                </div>
-              ))}
-            </div>
-            
-            <Button className="w-full" size="lg">
-              Start Free Trial
-            </Button>
-          </div>
+        {/* Header */}
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold mb-6">Simple pricing</h2>
+          <p className="text-lg md:text-xl text-muted-foreground">
+            One plan. Everything included.
+          </p>
+        </div>
+
+        {/* Pricing Card */}
+        <div className="flex justify-center">
+          <PricingCard.Card>
+            <PricingCard.Header>
+              <PricingCard.Plan>
+                <PricingCard.PlanName>
+                  <Clock aria-hidden="true" />
+                  <span>Ormozy Pro</span>
+                </PricingCard.PlanName>
+                <PricingCard.Badge>14-day free trial</PricingCard.Badge>
+              </PricingCard.Plan>
+              <PricingCard.Price>
+                <PricingCard.MainPrice>$8</PricingCard.MainPrice>
+                <PricingCard.Period>/ month</PricingCard.Period>
+              </PricingCard.Price>
+              <Button
+                className={cn(
+                  'w-full font-semibold text-white',
+                  'bg-gradient-to-b from-primary to-primary/90 shadow-[0_10px_25px_rgba(59,130,246,0.3)]',
+                )}
+                onClick={() => navigate('/auth')}
+              >
+                Start Free Trial
+              </Button>
+            </PricingCard.Header>
+            <PricingCard.Body>
+              <PricingCard.List>
+                {features.map((item) => (
+                  <PricingCard.ListItem key={item}>
+                    <span className="mt-0.5">
+                      <CheckCircle2
+                        className="h-4 w-4 text-primary"
+                        aria-hidden="true"
+                      />
+                    </span>
+                    <span>{item}</span>
+                  </PricingCard.ListItem>
+                ))}
+              </PricingCard.List>
+            </PricingCard.Body>
+          </PricingCard.Card>
         </div>
       </div>
+
+      {/* Background decorations */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
+        style={{
+          backgroundImage:
+            'radial-gradient(rgba(59,130,246,0.08) 0.8px, transparent 0.8px)',
+          backgroundSize: '14px 14px',
+          maskImage:
+            'radial-gradient(circle at 50% 50%, rgba(0,0,0,0.8), rgba(0,0,0,0.2) 40%, rgba(0,0,0,0) 70%)',
+        }}
+      />
     </section>
   );
 };
