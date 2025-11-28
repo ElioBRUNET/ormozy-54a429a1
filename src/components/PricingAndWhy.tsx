@@ -67,23 +67,37 @@ const PricingAndWhy = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start max-w-6xl mx-auto">
-          {/* Why Ormozy */}
-          <div className="flex flex-col order-2 lg:order-1">
-            <h3 className="text-2xl font-bold mb-6 text-center lg:text-left">Why Ormozy exists</h3>
-            <div className="space-y-2 max-w-md mx-auto lg:mx-0 w-full">
-              <FaqAccordion 
-                data={faqData}
-                className="max-w-full p-0"
-                timestamp=""
-              />
+        <div className="space-y-12 max-w-6xl mx-auto">
+          {/* Why Ormozy - Horizontal Grid */}
+          <div className="flex flex-col">
+            <h3 className="text-2xl font-bold mb-8 text-center">Why Ormozy exists</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-w-5xl mx-auto">
+              {faqData.map((item) => (
+                <div 
+                  key={item.id}
+                  className="p-4 rounded-lg bg-card border border-border hover:border-primary/50 transition-colors"
+                >
+                  <div className="flex items-start gap-3">
+                    {item.icon && item.iconPosition === 'left' && (
+                      <span className="text-xl flex-shrink-0">{item.icon}</span>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-semibold mb-2 text-sm">{item.question}</h4>
+                      <p className="text-xs text-muted-foreground leading-relaxed">{item.answer}</p>
+                    </div>
+                    {item.icon && item.iconPosition === 'right' && (
+                      <span className="text-xl flex-shrink-0">{item.icon}</span>
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
           
-          {/* Pricing Card */}
-          <div className="flex flex-col order-1 lg:order-2">
-            <h3 className="text-2xl font-bold mb-6 text-center lg:text-left">Simple pricing</h3>
-            <div className="flex justify-center lg:justify-start max-w-md mx-auto lg:mx-0 w-full">
+          {/* Pricing Card - Wider */}
+          <div className="flex flex-col">
+            <h3 className="text-2xl font-bold mb-8 text-center">Simple pricing</h3>
+            <div className="flex justify-center max-w-2xl mx-auto w-full">
               <PricingCard.Card className="w-full">
                 <PricingCard.Header>
                   <PricingCard.Plan>
@@ -108,7 +122,7 @@ const PricingAndWhy = () => {
                   </Button>
                 </PricingCard.Header>
                 <PricingCard.Body>
-                  <PricingCard.List>
+                  <PricingCard.List className="grid grid-cols-1 md:grid-cols-2 gap-x-6">
                     {features.map((item) => (
                       <PricingCard.ListItem key={item}>
                         <span className="mt-0.5">
