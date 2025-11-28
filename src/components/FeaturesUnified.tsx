@@ -3,63 +3,25 @@ import { Bell, Check, BarChart3, Zap, Edit3, LineChart, Eye, Focus, Shield, Repe
 
 const FeaturesUnified = () => {
   const features = [
-    // Micro-tracking section
     {
-      title: "Gentle nudges",
-      description: "Every 15 minutes, a friendly ping. No pressure, just presence.",
+      title: "Gentle nudges every 15 minutes",
+      description: "A friendly notification every 15 minutes. No pressure, just a simple reminder to check in. The rhythm becomes second nature.",
       icon: <Bell className="w-6 h-6" />,
     },
     {
-      title: "Quick logging",
-      description: "One tap. That's it. Tested over 1,000 times to get it right.",
+      title: "One-tap logging",
+      description: "Quick note what you've been doing. One tap. That's it. Back to work in seconds. Tested over 1,000 times to feel effortless.",
       icon: <Check className="w-6 h-6" />,
     },
     {
-      title: "Crystal clarity",
-      description: "See where your day went. No guessing, just patterns.",
-      icon: <BarChart3 className="w-6 h-6" />,
-    },
-    {
-      title: "Zero friction",
-      description: "Built to disappear into your workflow. Like magic, but real.",
-      icon: <Zap className="w-6 h-6" />,
-    },
-    // How it works section
-    {
-      title: "Receive notification",
-      description: "Every 15 minutes, Ormozy gently reminds you to check in. Ping. What are you working on?",
-      icon: <Bell className="w-6 h-6" />,
-    },
-    {
-      title: "Log in seconds",
-      description: "Quickly note what you've been working on—no complexity. One tap. Done. Back to work.",
-      icon: <Edit3 className="w-6 h-6" />,
-    },
-    {
-      title: "View your day",
-      description: "See a clear summary of how you spent your time and where your focus went. Patterns emerge. Clarity follows.",
-      icon: <LineChart className="w-6 h-6" />,
-    },
-    // Benefits section
-    {
-      title: "Improved clarity",
-      description: "See exactly where your time goes without guessing or estimating. No more 'where did my day go?'",
+      title: "Crystal clear patterns",
+      description: "See exactly where your day went. No guessing, no estimating. Just clear insights into how you spend your time.",
       icon: <Eye className="w-6 h-6" />,
     },
     {
-      title: "Better focus",
-      description: "Regular check-ins naturally encourage mindful work and reduce distractions. Stay in the zone.",
+      title: "Better focus & accountability",
+      description: "Regular check-ins naturally encourage mindful work. Stay on track throughout the day. Your future self will thank you.",
       icon: <Focus className="w-6 h-6" />,
-    },
-    {
-      title: "Built-in accountability",
-      description: "Knowing you'll log your time helps you stay on track throughout the day. Your future self will thank you.",
-      icon: <Shield className="w-6 h-6" />,
-    },
-    {
-      title: "Consistent tracking",
-      description: "The 15-minute rhythm becomes second nature—no manual timers needed. Set it and forget it (well, almost).",
-      icon: <Repeat className="w-6 h-6" />,
     },
   ];
 
@@ -73,7 +35,7 @@ const FeaturesUnified = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 relative z-10 max-w-6xl mx-auto">
           {features.map((feature, index) => (
             <Feature key={feature.title} {...feature} index={index} />
           ))}
@@ -98,19 +60,11 @@ const Feature = ({
     <div
       className={cn(
         "flex flex-col lg:border-r py-10 relative group/feature border-border",
-        (index === 0 || index === 4 || index === 8) && "lg:border-l border-border",
-        index < 8 && "lg:border-b border-border"
+        index === 0 && "lg:border-l border-border",
+        index < 4 && "lg:border-b border-border"
       )}
     >
-      {index < 4 && (
-        <div className="opacity-0 group-hover/feature:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-t from-muted/50 to-transparent pointer-events-none" />
-      )}
-      {index >= 4 && index < 8 && (
-        <div className="opacity-0 group-hover/feature:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-t from-muted/50 to-transparent pointer-events-none" />
-      )}
-      {index >= 8 && (
-        <div className="opacity-0 group-hover/feature:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-b from-muted/50 to-transparent pointer-events-none" />
-      )}
+      <div className="opacity-0 group-hover/feature:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-t from-muted/50 to-transparent pointer-events-none" />
       <div className="mb-4 relative z-10 px-10 text-muted-foreground">
         {icon}
       </div>
