@@ -68,28 +68,17 @@ const PricingAndWhy = () => {
         </div>
 
         <div className="space-y-12 max-w-6xl mx-auto">
-          {/* Why Ormozy - Horizontal Grid */}
+          {/* Why Ormozy - Horizontal Bubble Layout */}
           <div className="flex flex-col">
             <h3 className="text-2xl font-bold mb-8 text-center">Why Ormozy exists</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-w-5xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
               {faqData.map((item) => (
-                <div 
+                <FaqAccordion 
                   key={item.id}
-                  className="p-4 rounded-lg bg-card border border-border hover:border-primary/50 transition-colors"
-                >
-                  <div className="flex items-start gap-3">
-                    {item.icon && item.iconPosition === 'left' && (
-                      <span className="text-xl flex-shrink-0">{item.icon}</span>
-                    )}
-                    <div className="flex-1 min-w-0">
-                      <h4 className="font-semibold mb-2 text-sm">{item.question}</h4>
-                      <p className="text-xs text-muted-foreground leading-relaxed">{item.answer}</p>
-                    </div>
-                    {item.icon && item.iconPosition === 'right' && (
-                      <span className="text-xl flex-shrink-0">{item.icon}</span>
-                    )}
-                  </div>
-                </div>
+                  data={[item]}
+                  className="p-0"
+                  timestamp=""
+                />
               ))}
             </div>
           </div>
