@@ -62,6 +62,8 @@ export default {
         },
         "activity-block": "hsl(var(--activity-block))",
         "activity-block-filled": "hsl(var(--activity-block-filled))",
+        brand: "hsl(var(--brand))",
+        "brand-foreground": "hsl(var(--brand-foreground))",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -85,10 +87,20 @@ export default {
             height: "0",
           },
         },
+        appear: {
+          "0%": { opacity: "0", transform: "translateY(10px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        "appear-zoom": {
+          "0%": { opacity: "0", transform: "scale(0.95)" },
+          "100%": { opacity: "1", transform: "scale(1)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        appear: "appear 0.5s ease-out forwards",
+        "appear-zoom": "appear-zoom 0.5s ease-out forwards",
       },
     },
   },
