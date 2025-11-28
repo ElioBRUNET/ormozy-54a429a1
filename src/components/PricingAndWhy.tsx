@@ -67,12 +67,12 @@ const PricingAndWhy = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-[420px_1fr] gap-8 lg:gap-16 items-start">
           {/* Pricing Card */}
           <div className="flex flex-col">
             <h3 className="text-2xl font-bold mb-6 text-center lg:text-left">Simple pricing</h3>
             <div className="flex justify-center lg:justify-start">
-              <PricingCard.Card>
+              <PricingCard.Card className="w-full">
                 <PricingCard.Header>
                   <PricingCard.Plan>
                     <PricingCard.PlanName>
@@ -115,13 +115,15 @@ const PricingAndWhy = () => {
           </div>
 
           {/* Why Ormozy */}
-          <div className="flex flex-col">
+          <div className="flex flex-col lg:pl-8">
             <h3 className="text-2xl font-bold mb-6 text-center lg:text-left">Why Ormozy exists</h3>
-            <FaqAccordion 
-              data={faqData}
-              className="max-w-full"
-              timestamp=""
-            />
+            <div className="space-y-2">
+              <FaqAccordion 
+                data={faqData}
+                className="max-w-full p-0"
+                timestamp=""
+              />
+            </div>
           </div>
         </div>
       </div>
