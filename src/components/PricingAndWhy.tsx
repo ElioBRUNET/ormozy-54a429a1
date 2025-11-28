@@ -71,12 +71,12 @@ const PricingAndWhy = () => {
           {/* Why Ormozy - Horizontal Bubble Layout */}
           <div className="flex flex-col">
             <h3 className="text-2xl font-bold mb-8 text-center">Why Ormozy exists</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto justify-items-center w-full">
               {faqData.map((item) => (
                 <FaqAccordion 
                   key={item.id}
                   data={[item]}
-                  className="p-0"
+                  className="p-0 w-full max-w-sm"
                   timestamp=""
                 />
               ))}
