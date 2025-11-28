@@ -1,5 +1,4 @@
 import Hero from "@/components/Hero";
-import VideoDemo from "@/components/VideoDemo";
 import MicroTracking from "@/components/MicroTracking";
 import HowItWorks from "@/components/HowItWorks";
 import Benefits from "@/components/Benefits";
@@ -13,7 +12,6 @@ const Index = () => {
   return (
     <div className="min-h-screen">
       <Hero />
-      <VideoDemo />
       <MicroTracking />
       <HowItWorks />
       <Benefits />

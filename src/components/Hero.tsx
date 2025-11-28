@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, Clock } from "lucide-react";
-import { Mockup, MockupFrame } from "@/components/ui/mockup";
 import { Glow } from "@/components/ui/glow";
 import { cn } from "@/lib/utils";
 
@@ -47,25 +46,26 @@ const Hero = () => {
             </Button>
           </div>
 
-          {/* Mockup Image with Glow */}
-          <div className="relative pt-6 w-full">
+          {/* Arcade Demo with Glow */}
+          <div className="relative pt-6 w-full max-w-5xl mx-auto">
             <Glow
               variant="top"
               className="animate-appear-zoom opacity-0 delay-1000"
             />
-            <MockupFrame
-              className="animate-appear opacity-0 delay-700 mx-auto max-w-5xl relative z-20"
-              size="small"
+            <div 
+              className="animate-appear opacity-0 delay-700 relative z-20"
+              style={{ position: "relative", paddingBottom: "calc(65.034% + 41px)", height: 0, width: "100%" }}
             >
-              <Mockup type="responsive">
-                <div className="w-full aspect-[16/10] bg-gradient-to-br from-primary/5 to-accent/10 flex items-center justify-center">
-                  <div className="text-center space-y-4 p-8">
-                    <Clock className="w-16 h-16 mx-auto text-primary opacity-50" />
-                    <p className="text-muted-foreground text-sm">Dashboard Preview Coming Soon</p>
-                  </div>
-                </div>
-              </Mockup>
-            </MockupFrame>
+              <iframe 
+                src="https://demo.arcade.software/7TuF5S0OxugbkSt1QCXf?embed&embed_mobile=tab&embed_desktop=inline&show_copy_link=true" 
+                title="Review Time Tracking Activity on the Ormozy Dashboard" 
+                frameBorder="0" 
+                loading="lazy" 
+                allowFullScreen 
+                allow="clipboard-write" 
+                style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", colorScheme: "light" }}
+              />
+            </div>
           </div>
         </div>
       </div>
