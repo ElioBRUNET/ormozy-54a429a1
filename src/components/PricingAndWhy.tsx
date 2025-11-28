@@ -67,11 +67,11 @@ const PricingAndWhy = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-8 lg:gap-16 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start max-w-6xl mx-auto">
           {/* Why Ormozy */}
-          <div className="flex flex-col order-2 lg:order-1 lg:pr-8">
+          <div className="flex flex-col order-2 lg:order-1">
             <h3 className="text-2xl font-bold mb-6 text-center lg:text-left">Why Ormozy exists</h3>
-            <div className="space-y-2">
+            <div className="space-y-2 max-w-md mx-auto lg:mx-0 w-full">
               <FaqAccordion 
                 data={faqData}
                 className="max-w-full p-0"
@@ -83,7 +83,7 @@ const PricingAndWhy = () => {
           {/* Pricing Card */}
           <div className="flex flex-col order-1 lg:order-2">
             <h3 className="text-2xl font-bold mb-6 text-center lg:text-left">Simple pricing</h3>
-            <div className="flex justify-center lg:justify-start">
+            <div className="flex justify-center lg:justify-start max-w-md mx-auto lg:mx-0 w-full">
               <PricingCard.Card className="w-full">
                 <PricingCard.Header>
                   <PricingCard.Plan>
