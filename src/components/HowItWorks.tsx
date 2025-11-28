@@ -29,7 +29,7 @@ const HowItWorks = () => {
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">How it works</h2>
           <p className="text-lg text-muted-foreground">
-            Three steps. That's all. Alex kept it simple. 🧔🏻‍♂️
+            Three steps. That's all.
           </p>
         </div>
         

@@ -11,7 +11,7 @@ const MicroTracking = () => {
     {
       icon: Check,
       title: "Quick logging",
-      description: "One tap. That's it. Alex made sure of it (HE tested it 1,000+ times)."
+      description: "One tap. That's it. Tested over 1,000 times to get it right."
     },
     {
       icon: BarChart3,

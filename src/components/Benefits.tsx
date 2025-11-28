@@ -35,7 +35,7 @@ const Benefits = () => {
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">The benefits</h2>
           <p className="text-lg text-muted-foreground">
-            Alex tested these for months. They're real. 🧔🏻‍♂️
+            Tested for months. They're real.
           </p>
         </div>
         
