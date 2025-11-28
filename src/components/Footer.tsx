@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import logo from "@/assets/logo.png";
 
 const Footer = () => {
   const sections = [
@@ -32,7 +33,7 @@ const Footer = () => {
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           <div>
-            <h3 className="text-xl font-semibold mb-4">Ormozy</h3>
+            <img src={logo} alt="Ormozy" className="h-12 w-12 mb-4" />
             <p className="text-sm text-muted-foreground leading-relaxed">
               Simple time tracking that helps you stay present and understand your work patterns.
             </p>
