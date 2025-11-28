@@ -1,7 +1,5 @@
 import Hero from "@/components/Hero";
-import MicroTracking from "@/components/MicroTracking";
-import HowItWorks from "@/components/HowItWorks";
-import Benefits from "@/components/Benefits";
+import FeaturesUnified from "@/components/FeaturesUnified";
 import WhyOrmozy from "@/components/WhyOrmozy";
 import Testimonials from "@/components/Testimonials";
 import Pricing from "@/components/Pricing";
@@ -12,9 +10,7 @@ const Index = () => {
   return (
     <div className="min-h-screen">
       <Hero />
-      <MicroTracking />
-      <HowItWorks />
-      <Benefits />
+      <FeaturesUnified />
       <WhyOrmozy />
       <Testimonials />
       <Pricing />
