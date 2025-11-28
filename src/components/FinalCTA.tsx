@@ -1,33 +1,30 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Glow } from "@/components/ui/glow";
 import { useNavigate } from "react-router-dom";
-import { Rocket, Clock } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const FinalCTA = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="py-12 md:py-20 px-4">
-      <div className="max-w-4xl mx-auto">
-        <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10">
-          <CardContent className="p-12 text-center">
-            <div className="w-16 h-16 bg-primary/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <Rocket className="w-8 h-8 text-primary" />
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Start understanding your day
-            </h2>
-            <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Join the people who've discovered the power of simple, consistent time awareness.
-            </p>
-            <Button size="lg" className="px-10" onClick={() => navigate('/auth')}>
-              Begin Your Free Trial <Clock className="ml-2 w-5 h-5" />
-            </Button>
-            <p className="text-sm text-muted-foreground mt-6">
-              No credit card required • Free forever plan available
-            </p>
-          </CardContent>
-        </Card>
+    <section className={cn("group relative overflow-hidden py-20 sm:py-24")}>
+      <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center gap-6 text-center sm:gap-8 px-4">
+        <h2 className="text-3xl font-semibold sm:text-5xl animate-appear">
+          Start understanding your day
+        </h2>
+        <Button 
+          size="lg" 
+          className="animate-appear delay-100 px-10"
+          onClick={() => navigate('/auth')}
+        >
+          Begin Your Free Trial
+        </Button>
+        <p className="text-sm text-muted-foreground animate-appear delay-300">
+          No credit card required • 14-day free trial
+        </p>
+      </div>
+      <div className="absolute left-0 top-0 h-full w-full translate-y-[1rem] opacity-80 transition-all duration-500 ease-in-out group-hover:translate-y-[-2rem] group-hover:opacity-100">
+        <Glow variant="bottom" className="animate-appear-zoom delay-300" />
       </div>
     </section>
   );
