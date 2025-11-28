@@ -13,12 +13,12 @@ const Hero = () => {
     <section
       className={cn(
         "bg-background text-foreground",
-        "py-12 sm:py-24 md:py-32 px-4",
+        "py-12 sm:py-16 md:py-20 px-4",
         "overflow-hidden pb-0"
       )}
     >
-      <div className="mx-auto flex max-w-6xl flex-col gap-12 pt-16 sm:gap-24">
-        <div className="flex flex-col items-center gap-6 text-center sm:gap-12">
+      <div className="mx-auto flex max-w-6xl flex-col gap-8 pt-8 sm:gap-12">
+        <div className="flex flex-col items-center gap-4 text-center sm:gap-8">
           {/* Badge */}
           <Badge variant="outline" className="animate-appear gap-2">
             <span className="text-muted-foreground">For people who lose track of time</span>
@@ -48,9 +48,13 @@ const Hero = () => {
           </div>
 
           {/* Mockup Image with Glow */}
-          <div className="relative pt-12 w-full">
+          <div className="relative pt-6 w-full">
+            <Glow
+              variant="top"
+              className="animate-appear-zoom opacity-0 delay-1000"
+            />
             <MockupFrame
-              className="animate-appear opacity-0 delay-700 mx-auto max-w-5xl"
+              className="animate-appear opacity-0 delay-700 mx-auto max-w-5xl relative z-20"
               size="small"
             >
               <Mockup type="responsive">
@@ -62,10 +66,6 @@ const Hero = () => {
                 </div>
               </Mockup>
             </MockupFrame>
-            <Glow
-              variant="top"
-              className="animate-appear-zoom opacity-0 delay-1000"
-            />
           </div>
         </div>
       </div>
