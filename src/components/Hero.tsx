@@ -69,7 +69,7 @@ const Hero = () => {
           </h1>
 
           {/* Email Capture - All Devices */}
-          <div className="w-full max-w-md mx-auto animate-appear opacity-0 delay-700 space-y-4 mt-6">
+          <div className="relative z-20 w-full max-w-md mx-auto animate-appear opacity-0 delay-700 space-y-4 mt-6">
             {!email ? (
               <>
                 <div className="flex justify-center">
