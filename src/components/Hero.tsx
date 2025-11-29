@@ -83,8 +83,8 @@ const Hero = () => {
                     onClick={() => setEmail(" ")}
                     className="relative inline-flex items-center justify-center group"
                   >
-                    <div className="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-md blur-lg filter group-hover:opacity-100 group-hover:duration-200" />
-                    <span className="relative inline-flex items-center justify-center rounded-md bg-primary px-8 py-3 text-lg font-semibold text-primary-foreground transition-all duration-200 hover:bg-primary/90 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-primary/30">
+                    <div className="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200" />
+                    <span className="relative inline-flex items-center justify-center rounded-xl bg-primary px-6 py-2.5 text-base font-medium text-primary-foreground transition-all duration-200 hover:bg-primary/90 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-primary/30">
                       Send me the desktop app
                       <svg
                         viewBox="0 0 10 10"
