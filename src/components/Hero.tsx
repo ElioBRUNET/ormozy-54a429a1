@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, Clock, Mail, Sparkles } from "lucide-react";
+import { ArrowRight, Clock, Mail, Sparkles, Apple, Monitor } from "lucide-react";
 import { Glow } from "@/components/ui/glow";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/logo.png";
@@ -11,6 +11,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { ThreeDButton } from "@/components/ui/3d-button";
 import { IconArrowRight } from "@tabler/icons-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 const Hero = () => {
   const navigate = useNavigate();
   const {
@@ -18,6 +24,15 @@ const Hero = () => {
   } = useToast();
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  
+  const handleDownload = (platform: 'mac' | 'windows') => {
+    // Placeholder for actual download links
+    const downloadLinks = {
+      mac: '#download-mac',
+      windows: '#download-windows'
+    };
+    window.location.href = downloadLinks[platform];
+  };
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
@@ -68,10 +83,23 @@ const Hero = () => {
 
           {/* Actions - Hidden on Mobile */}
           <div className="relative z-10 hidden md:flex animate-appear justify-center gap-4 opacity-0 delay-300">
-            <Button size="lg" className="text-base sm:text-lg" onClick={() => navigate('/auth')}>
-              <Clock className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-              Get Started
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <ThreeDButton variant="default" size="default" className="px-8 py-3 text-base font-medium" leadingIcon={IconArrowRight}>
+                  Download now for free
+                </ThreeDButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="center" className="w-56">
+                <DropdownMenuItem onClick={() => handleDownload('mac')} className="cursor-pointer py-3">
+                  <Apple className="mr-2 h-5 w-5" />
+                  <span className="text-base">Download for Mac</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleDownload('windows')} className="cursor-pointer py-3">
+                  <Monitor className="mr-2 h-5 w-5" />
+                  <span className="text-base">Download for Windows</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
           {/* Mobile Email Capture - Only on Mobile */}
