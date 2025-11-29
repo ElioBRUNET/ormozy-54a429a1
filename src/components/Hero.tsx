@@ -84,8 +84,8 @@ const Hero = () => {
                 </div>
                 
                 <div className="space-y-1 text-center text-xs font-light text-muted-foreground px-4">
-                  <p>📧 Link sent to inbox</p>
-                  <p>💻 Open on desktop</p>
+                  <p>Link sent to inbox</p>
+                  <p>Open on desktop</p>
                 </div>
               </> : <form onSubmit={handleEmailSubmit} className="flex flex-col gap-3 px-4">
                 <Input type="email" placeholder="your@email.com" value={email === " " ? "" : email} onChange={e => setEmail(e.target.value)} required className="h-12 text-base" disabled={isLoading} autoFocus />
