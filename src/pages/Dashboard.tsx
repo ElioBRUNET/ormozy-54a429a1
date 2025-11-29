@@ -5,6 +5,7 @@ import { User } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { LogOut, Calendar as CalendarIcon, Clock, Activity } from "lucide-react";
+import logo from "@/assets/logo.png";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -105,7 +106,7 @@ const Dashboard = () => {
     );
   }
 
-  const hours = Array.from({ length: 15 }, (_, i) => i + 6);
+  const hours = Array.from({ length: 24 }, (_, i) => i);
   
   const getLogsForHour = (hour: number) => {
     return workLogs.filter(log => {
@@ -123,8 +124,7 @@ const Dashboard = () => {
       <header className="border-b border-border bg-card">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-semibold text-foreground">Ormozy</h1>
-            <p className="text-sm text-muted-foreground">Time Tracking Dashboard</p>
+            <img src={logo} alt="Ormozy" className="h-8" />
           </div>
           <div className="flex items-center gap-4">
             <span className="text-sm text-muted-foreground hidden sm:block">{user?.email}</span>
