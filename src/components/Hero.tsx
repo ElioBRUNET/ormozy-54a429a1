@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, Clock, Mail, Sparkles, Apple, Monitor } from "lucide-react";
+import { Mail } from "lucide-react";
 import { Glow } from "@/components/ui/glow";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/logo.webp";
@@ -10,12 +10,6 @@ import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { ThreeDButton } from "@/components/ui/3d-button";
 import { IconArrowRight } from "@tabler/icons-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 const Hero = () => {
   const navigate = useNavigate();
   const {
@@ -24,14 +18,6 @@ const Hero = () => {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   
-  const handleDownload = (platform: 'mac' | 'windows') => {
-    // Placeholder for actual download links
-    const downloadLinks = {
-      mac: '#download-mac',
-      windows: '#download-windows'
-    };
-    window.location.href = downloadLinks[platform];
-  };
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
@@ -82,29 +68,8 @@ const Hero = () => {
             No more "Where the fu**k did my day go"
           </h1>
 
-          {/* Actions - Hidden on Mobile */}
-          <div className="relative z-10 hidden md:flex animate-appear justify-center gap-4 opacity-0 delay-300">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <ThreeDButton variant="default" size="default" className="px-8 py-3 text-base font-medium" leadingIcon={IconArrowRight}>
-                  Download now for free
-                </ThreeDButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="center" className="w-56">
-                <DropdownMenuItem onClick={() => handleDownload('mac')} className="cursor-pointer py-3">
-                  <Apple className="mr-2 h-5 w-5" />
-                  <span className="text-base">Download for Mac</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleDownload('windows')} className="cursor-pointer py-3">
-                  <Monitor className="mr-2 h-5 w-5" />
-                  <span className="text-base">Download for Windows</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-
-          {/* Mobile Email Capture - Only on Mobile */}
-          <div className="md:hidden w-full max-w-md mx-auto animate-appear opacity-0 delay-700 space-y-4 mt-6">
+          {/* Email Capture - All Devices */}
+          <div className="w-full max-w-md mx-auto animate-appear opacity-0 delay-700 space-y-4 mt-6">
             {!email ? <>
                 <div className="flex justify-center">
                   <ThreeDButton onClick={() => setEmail(" ")} variant="default" size="default" className="px-6 py-2.5 text-base font-medium" leadingIcon={IconArrowRight}>
