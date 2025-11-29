@@ -62,7 +62,7 @@ const Hero = () => {
           </Badge>
 
           {/* Title */}
-          <h1 className="relative z-10 animate-appear bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text font-semibold text-transparent drop-shadow-2xl leading-snug md:text-6xl md:leading-tight md:px-32 lg:px-48 pb-2 text-3xl">
+          <h1 className="relative z-10 animate-appear bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text font-semibold text-transparent drop-shadow-2xl leading-snug md:text-6xl md:leading-tight md:px-32 lg:px-48 pb-2 text-4xl">
             No more "Where the fu**k did my day go"
           </h1>
 
@@ -75,7 +75,7 @@ const Hero = () => {
           </div>
 
           {/* Mobile Email Capture - Only on Mobile */}
-          <div className="md:hidden w-full max-w-md mx-auto animate-appear opacity-0 delay-700 space-y-4">
+          <div className="md:hidden w-full max-w-md mx-auto animate-appear opacity-0 delay-700 space-y-4 mt-10">
             {!email ? <>
                 <div className="flex justify-center">
                   <ThreeDButton onClick={() => setEmail(" ")} variant="default" size="default" className="px-6 py-2.5 text-base font-medium" leadingIcon={IconArrowRight}>
