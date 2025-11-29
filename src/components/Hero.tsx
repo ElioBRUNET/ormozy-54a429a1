@@ -9,6 +9,8 @@ import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { ThreeDButton } from "@/components/ui/3d-button";
+import { IconArrowRight } from "@tabler/icons-react";
 const Hero = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -79,31 +81,15 @@ const Hero = () => {
             {!email ? (
               <>
                 <div className="flex justify-center">
-                  <button
+                  <ThreeDButton
                     onClick={() => setEmail(" ")}
-                    className="relative inline-flex items-center justify-center group"
+                    variant="default"
+                    size="default"
+                    className="px-6 py-2.5 text-base font-medium"
+                    leadingIcon={IconArrowRight}
                   >
-                    <div className="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200" />
-                    <span className="relative inline-flex items-center justify-center rounded-xl bg-primary px-6 py-2.5 text-base font-medium text-primary-foreground transition-all duration-200 hover:bg-primary/90 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-primary/30">
-                      Send me the desktop app
-                      <svg
-                        viewBox="0 0 10 10"
-                        height="10"
-                        width="10"
-                        fill="none"
-                        className="mt-0.5 ml-2 -mr-1 stroke-current stroke-2"
-                      >
-                        <path
-                          d="M0 5h7"
-                          className="transition opacity-0 group-hover:opacity-100"
-                        />
-                        <path
-                          d="M1 1l4 4-4 4"
-                          className="transition group-hover:translate-x-[3px]"
-                        />
-                      </svg>
-                    </span>
-                  </button>
+                    Send me the desktop app
+                  </ThreeDButton>
                 </div>
                 
                 <div className="space-y-1 text-center text-xs font-light text-muted-foreground px-4">
