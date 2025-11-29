@@ -18,7 +18,7 @@ const FeaturesUnified = ({ className }: { className?: string }) => {
     description: "Regular check-ins naturally encourage mindful work. Stay on track throughout the day. Your future self will thank you.",
     icon: <Focus className="w-6 h-6" />
   }];
-  return <section className={cn("py-12 md:py-20 px-4 bg-muted/20 md:bg-transparent", className)}>
+  return <section id="features" className={cn("py-12 md:py-20 px-4 bg-muted/20 md:bg-transparent", className)}>
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12 md:mb-16">
           <h2 className="text-2xl md:text-4xl lg:text-5xl mb-6 font-semibold">Everything you need to track your time</h2>
