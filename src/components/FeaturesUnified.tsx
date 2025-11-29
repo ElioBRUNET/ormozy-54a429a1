@@ -18,7 +18,7 @@ const FeaturesUnified = () => {
     description: "Regular check-ins naturally encourage mindful work. Stay on track throughout the day. Your future self will thank you.",
     icon: <Focus className="w-6 h-6" />
   }];
-  return <section className="py-12 md:py-20 px-4">
+  return <section className="py-12 md:py-20 px-4 bg-muted/20 md:bg-transparent">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12 md:mb-16">
           <h2 className="text-2xl md:text-4xl lg:text-5xl mb-6 font-semibold">Everything you need to track your time</h2>
@@ -44,9 +44,9 @@ const Feature = ({
   icon: React.ReactNode;
   index: number;
 }) => {
-  return <div className={cn("flex flex-col lg:border-r py-10 relative group/feature border-border", index === 0 && "lg:border-l border-border", index < 4 && "lg:border-b border-border")}>
+  return <div className={cn("flex flex-col lg:border-r py-6 md:py-10 relative group/feature border-border", index === 0 && "lg:border-l border-border", index < 4 && "lg:border-b border-border")}>
       <div className="opacity-0 group-hover/feature:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-t from-muted/50 to-transparent pointer-events-none" />
-      <div className="mb-4 relative z-10 px-10 text-muted-foreground">
+      <div className="mb-4 relative z-10 px-10 text-primary/80 md:text-muted-foreground">
         {icon}
       </div>
       <div className="text-lg font-bold mb-2 relative z-10 px-10">
