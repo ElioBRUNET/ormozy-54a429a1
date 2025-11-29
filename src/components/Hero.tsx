@@ -63,8 +63,8 @@ const Hero = () => {
             No more "Where the fu**k did my day go"
           </h1>
 
-          {/* Actions */}
-          <div className="relative z-10 flex animate-appear justify-center gap-4 opacity-0 delay-300">
+          {/* Actions - Hidden on Mobile */}
+          <div className="relative z-10 hidden md:flex animate-appear justify-center gap-4 opacity-0 delay-300">
             <Button size="lg" className="text-base sm:text-lg" onClick={() => navigate('/auth')}>
               <Clock className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
               Get Started
@@ -72,7 +72,7 @@ const Hero = () => {
           </div>
 
           {/* Mobile Email Capture - Only on Mobile */}
-          <div className="md:hidden w-full max-w-md mx-auto animate-appear opacity-0 delay-700 space-y-6">
+          <div className="md:hidden w-full max-w-md mx-auto animate-appear opacity-0 delay-700 space-y-4">
             {!email ? (
               <>
                 <div className="flex justify-center">
@@ -81,14 +81,14 @@ const Hero = () => {
                     className="relative inline-flex items-center justify-center group"
                   >
                     <div className="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-md blur-lg filter group-hover:opacity-100 group-hover:duration-200" />
-                    <span className="relative inline-flex items-center justify-center rounded-md bg-gray-900 px-8 py-3 text-lg font-semibold text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30">
+                    <span className="relative inline-flex items-center justify-center rounded-md bg-primary px-8 py-3 text-lg font-semibold text-primary-foreground transition-all duration-200 hover:bg-primary/90 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-primary/30">
                       Send me the desktop app
                       <svg
                         viewBox="0 0 10 10"
                         height="10"
                         width="10"
                         fill="none"
-                        className="mt-0.5 ml-2 -mr-1 stroke-white stroke-2"
+                        className="mt-0.5 ml-2 -mr-1 stroke-current stroke-2"
                       >
                         <path
                           d="M0 5h7"
@@ -103,9 +103,9 @@ const Hero = () => {
                   </button>
                 </div>
                 
-                <div className="space-y-2 text-center text-sm text-muted-foreground px-4">
-                  <p>📧 Get the download link sent to your inbox</p>
-                  <p>💻 Open it on your desktop & start tracking time effortlessly</p>
+                <div className="space-y-1 text-center text-xs font-light text-muted-foreground px-4">
+                  <p>📧 Link sent to inbox</p>
+                  <p>💻 Open on desktop</p>
                 </div>
               </>
             ) : (
