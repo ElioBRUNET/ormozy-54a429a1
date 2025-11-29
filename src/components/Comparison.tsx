@@ -2,11 +2,11 @@ import { Check, X } from 'lucide-react';
 const Comparison = () => {
   const paidApps = ['Monthly subscription fees ($8-15)', 'Complex setup and onboarding', 'Limited free trial period', 'Data locked behind paywall', 'No export without premium'];
   const ormozyBenefits = ['Completely free forever', 'No credit card required', 'Unlimited tracking and insights', 'Export your data anytime', 'All features included'];
-  return <section className="py-20 md:py-28 px-4 relative overflow-hidden">
+  return <section className="pt-12 pb-20 md:py-28 px-4 relative overflow-hidden">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12 md:mb-16">
-          <h2 className="md:text-4xl lg:text-5xl font-semibold mb-6 text-2xl">
+          <h2 className="text-2xl md:text-5xl lg:text-6xl font-semibold mb-6">
             Why pay for time tracking?
           </h2>
         </div>
