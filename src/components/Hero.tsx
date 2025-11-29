@@ -43,8 +43,11 @@ const Hero = () => {
     }
   };
 
-  return <section className={cn("bg-background text-foreground", "pt-8 sm:pt-10 md:pt-12 pb-0 px-4", "overflow-hidden")}>
-      <div className="mx-auto flex max-w-6xl flex-col gap-8 sm:gap-12">
+  return <section className={cn("bg-background text-foreground", "pt-8 sm:pt-10 md:pt-12 pb-0 px-4", "overflow-hidden relative")}>
+      {/* Mobile Blue Gradient Shade - Top */}
+      <div className="md:hidden absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-primary/20 via-primary/5 to-transparent animate-appear opacity-0 pointer-events-none" />
+      
+      <div className="mx-auto flex max-w-6xl flex-col gap-8 sm:gap-12 relative z-10">
         <div className="flex flex-col items-center gap-4 text-center sm:gap-8">
           {/* Logo */}
           <img src={logo} alt="Ormozy" className="h-24 w-24 sm:h-28 sm:w-28 md:h-32 md:w-32 animate-appear" />
