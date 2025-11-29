@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowRight, Clock, Mail, Sparkles, Apple, Monitor } from "lucide-react";
 import { Glow } from "@/components/ui/glow";
 import { cn } from "@/lib/utils";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo.webp";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
