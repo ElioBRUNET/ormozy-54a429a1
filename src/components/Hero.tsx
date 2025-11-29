@@ -46,7 +46,7 @@ const Hero = () => {
       setIsLoading(false);
     }
   };
-  return <section className={cn("bg-background text-foreground", "pt-8 sm:pt-10 md:pt-12 pb-12 md:pb-0 px-4", "overflow-hidden relative")}>
+  return <section className={cn("bg-background text-foreground", "pt-8 sm:pt-10 md:pt-12 pb-8 md:pb-0 px-4", "overflow-hidden relative")}>
       {/* Mobile Blue Gradient Shade - Top */}
       <div className="md:hidden absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-primary/20 via-primary/5 to-transparent animate-appear opacity-0 pointer-events-none" />
       
@@ -62,7 +62,7 @@ const Hero = () => {
           </Badge>
 
           {/* Title */}
-          <h1 className="relative z-10 animate-appear bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text font-semibold text-transparent drop-shadow-2xl leading-tight md:leading-tight md:text-7xl md:px-32 lg:px-48 pb-2 text-5xl">
+          <h1 className="relative z-10 animate-appear bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text font-semibold text-transparent drop-shadow-2xl leading-none md:leading-tight md:text-7xl md:px-32 lg:px-48 pb-2 text-5xl">
             No more "Where the fu**k did my day go"
           </h1>
 
@@ -75,7 +75,7 @@ const Hero = () => {
           </div>
 
           {/* Mobile Email Capture - Only on Mobile */}
-          <div className="md:hidden w-full max-w-md mx-auto animate-appear opacity-0 delay-700 space-y-4 mt-10">
+          <div className="md:hidden w-full max-w-md mx-auto animate-appear opacity-0 delay-700 space-y-4 mt-6">
             {!email ? <>
                 <div className="flex justify-center">
                   <ThreeDButton onClick={() => setEmail(" ")} variant="default" size="default" className="px-6 py-2.5 text-base font-medium" leadingIcon={IconArrowRight}>
