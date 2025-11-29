@@ -57,7 +57,7 @@ const Hero = () => {
           
           {/* Badge */}
           <Badge variant="outline" className="animate-appear gap-2 text-xs sm:text-sm">
-            <span className="text-muted-foreground">For people who lose track of time</span>
+            <span className="text-muted-foreground">Inspired by a JACKED businessman</span>
             
           </Badge>
 
