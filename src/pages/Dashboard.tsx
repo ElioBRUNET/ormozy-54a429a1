@@ -4,12 +4,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { LogOut, Calendar as CalendarIcon, Clock, Activity } from "lucide-react";
+import { LogOut, Calendar as CalendarIcon, Clock, Activity, Flame } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { format, startOfDay, endOfDay } from "date-fns";
+import { format, startOfDay, endOfDay, differenceInDays } from "date-fns";
 import { cn } from "@/lib/utils";
 
 type WorkLog = {
@@ -20,12 +20,23 @@ type WorkLog = {
   updated_at: string;
 };
 
+type UserStreak = {
+  id: string;
+  user_id: string;
+  current_streak: number;
+  longest_streak: number;
+  last_activity_date: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
 const Dashboard = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [workLogs, setWorkLogs] = useState<WorkLog[]>([]);
   const [loadingLogs, setLoadingLogs] = useState(true);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [streak, setStreak] = useState<UserStreak | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -37,6 +48,7 @@ const Dashboard = () => {
         setUser(session.user);
         setLoading(false);
         fetchWorkLogs();
+        fetchStreak();
       }
     });
 
@@ -46,6 +58,7 @@ const Dashboard = () => {
       } else {
         setUser(session.user);
         fetchWorkLogs();
+        fetchStreak();
       }
     });
 
@@ -89,6 +102,23 @@ const Dashboard = () => {
     }
   };
 
+  const fetchStreak = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('user_streaks')
+        .select('*')
+        .single();
+
+      if (error && error.code !== 'PGRST116') {
+        console.error('Error fetching streak:', error);
+      } else {
+        setStreak(data);
+      }
+    } catch (error) {
+      console.error('Unexpected error:', error);
+    }
+  };
+
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     toast({
@@ -117,6 +147,21 @@ const Dashboard = () => {
 
   const totalActivities = workLogs.length;
   const activeHours = new Set(workLogs.map(log => new Date(log.created_at).getHours())).size;
+  
+  // Calculate streak status
+  const getStreakStatus = () => {
+    if (!streak?.last_activity_date) return { status: 'none', daysSince: 0 };
+    
+    const lastActivity = new Date(streak.last_activity_date);
+    const today = new Date();
+    const daysSince = differenceInDays(today, lastActivity);
+    
+    if (daysSince === 0) return { status: 'active', daysSince: 0 };
+    if (daysSince === 1) return { status: 'warning', daysSince: 1 };
+    return { status: 'expired', daysSince };
+  };
+  
+  const streakStatus = getStreakStatus();
 
   return (
     <div className="min-h-screen bg-background">
@@ -137,7 +182,45 @@ const Dashboard = () => {
 
       <main className="container mx-auto px-6 py-8">
         {/* Analytics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+          <Card className="border-border bg-card">
+            <CardContent className="pt-6">
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground mb-1">Current Streak</p>
+                  <div className="flex items-center gap-2">
+                    <p className="text-4xl font-semibold text-foreground">
+                      {streak?.current_streak || 0}
+                    </p>
+                    {streakStatus.status === 'warning' && (
+                      <span className="text-xs text-yellow-500 font-medium">⚠️ Log today!</span>
+                    )}
+                  </div>
+                  {streak && streak.longest_streak > (streak.current_streak || 0) && (
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Best: {streak.longest_streak} days
+                    </p>
+                  )}
+                </div>
+                <div 
+                  className={cn(
+                    "p-3 rounded-lg transition-all duration-300",
+                    streakStatus.status === 'warning' 
+                      ? "bg-yellow-500/20 animate-pulse" 
+                      : "bg-orange-500/20"
+                  )}
+                >
+                  <Flame className={cn(
+                    "h-6 w-6",
+                    streakStatus.status === 'warning' 
+                      ? "text-yellow-500" 
+                      : "text-orange-500"
+                  )} />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
           <Card className="border-border bg-card">
             <CardContent className="pt-6">
               <div className="flex items-start justify-between">
