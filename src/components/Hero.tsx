@@ -72,33 +72,53 @@ const Hero = () => {
           </div>
 
           {/* Mobile Email Capture - Only on Mobile */}
-          <div className="md:hidden w-full max-w-md mx-auto animate-appear opacity-0 delay-700">
-            <div className="bg-gradient-to-br from-primary/5 to-accent/5 border border-primary/20 rounded-2xl p-6 space-y-4">
-              <div className="flex items-center justify-center gap-2 text-primary">
-                <Sparkles className="h-5 w-5" />
-                <span className="text-sm font-semibold">Desktop App Only</span>
-              </div>
-              
-              <h3 className="text-xl font-semibold text-center">
-                Get the Download Link in Your Inbox
-              </h3>
-              
-              <p className="text-sm text-muted-foreground text-center leading-relaxed">
-                You're on mobile, but Ormozy works on desktop. Drop your email and we'll send you the link to download it later on your computer. 
-                <span className="block mt-2 font-medium text-foreground">
-                  No spam. Just the app you need. 💙
-                </span>
-              </p>
-
-              <form onSubmit={handleEmailSubmit} className="flex flex-col gap-3">
+          <div className="md:hidden w-full max-w-md mx-auto animate-appear opacity-0 delay-700 space-y-6">
+            {!email ? (
+              <>
+                <div className="flex justify-center">
+                  <button
+                    onClick={() => setEmail(" ")}
+                    className="relative inline-flex items-center justify-center group"
+                  >
+                    <div className="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-md blur-lg filter group-hover:opacity-100 group-hover:duration-200" />
+                    <span className="relative inline-flex items-center justify-center rounded-md bg-gray-900 px-8 py-3 text-lg font-semibold text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30">
+                      Send me the desktop app
+                      <svg
+                        viewBox="0 0 10 10"
+                        height="10"
+                        width="10"
+                        fill="none"
+                        className="mt-0.5 ml-2 -mr-1 stroke-white stroke-2"
+                      >
+                        <path
+                          d="M0 5h7"
+                          className="transition opacity-0 group-hover:opacity-100"
+                        />
+                        <path
+                          d="M1 1l4 4-4 4"
+                          className="transition group-hover:translate-x-[3px]"
+                        />
+                      </svg>
+                    </span>
+                  </button>
+                </div>
+                
+                <div className="space-y-2 text-center text-sm text-muted-foreground px-4">
+                  <p>📧 Get the download link sent to your inbox</p>
+                  <p>💻 Open it on your desktop & start tracking time effortlessly</p>
+                </div>
+              </>
+            ) : (
+              <form onSubmit={handleEmailSubmit} className="flex flex-col gap-3 px-4">
                 <Input
                   type="email"
                   placeholder="your@email.com"
-                  value={email}
+                  value={email === " " ? "" : email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   className="h-12 text-base"
                   disabled={isLoading}
+                  autoFocus
                 />
                 <Button 
                   type="submit" 
@@ -110,7 +130,7 @@ const Hero = () => {
                   {isLoading ? "Sending..." : "Send Me the Link"}
                 </Button>
               </form>
-            </div>
+            )}
           </div>
 
           {/* Arcade Demo with Glow - Hidden on Mobile */}
