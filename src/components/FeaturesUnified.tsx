@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Bell, Check, BarChart3, Zap, Edit3, LineChart, Eye, Focus, Shield, Repeat } from "lucide-react";
-const FeaturesUnified = () => {
+const FeaturesUnified = ({ className }: { className?: string }) => {
   const features = [{
     title: "Gentle nudges every 15 minutes",
     description: "A friendly notification every 15 minutes. No pressure, just a simple reminder to check in. The rhythm becomes second nature.",
@@ -18,7 +18,7 @@ const FeaturesUnified = () => {
     description: "Regular check-ins naturally encourage mindful work. Stay on track throughout the day. Your future self will thank you.",
     icon: <Focus className="w-6 h-6" />
   }];
-  return <section className="py-12 md:py-20 px-4 bg-muted/20 md:bg-transparent">
+  return <section className={cn("py-12 md:py-20 px-4 bg-muted/20 md:bg-transparent", className)}>
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12 md:mb-16">
           <h2 className="text-2xl md:text-4xl lg:text-5xl mb-6 font-semibold">Everything you need to track your time</h2>

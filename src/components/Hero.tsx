@@ -46,7 +46,7 @@ const Hero = () => {
       setIsLoading(false);
     }
   };
-  return <section className={cn("bg-background text-foreground", "pt-8 sm:pt-10 md:pt-12 pb-0 px-4", "overflow-hidden relative")}>
+  return <section className={cn("bg-background text-foreground", "pt-8 sm:pt-10 md:pt-12 pb-12 md:pb-0 px-4", "overflow-hidden relative")}>
       {/* Mobile Blue Gradient Shade - Top */}
       <div className="md:hidden absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-primary/20 via-primary/5 to-transparent animate-appear opacity-0 pointer-events-none" />
       
