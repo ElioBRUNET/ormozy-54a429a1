@@ -1,12 +1,48 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, Clock } from "lucide-react";
+import { ArrowRight, Clock, Mail, Sparkles } from "lucide-react";
 import { Glow } from "@/components/ui/glow";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/logo.png";
+import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 const Hero = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleEmailSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+
+    setIsLoading(true);
+    try {
+      const { error } = await supabase.functions.invoke('send-download-link', {
+        body: { email }
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Check your inbox! 📧",
+        description: "We've sent you the download link. Open it on your desktop to get started.",
+      });
+      setEmail("");
+    } catch (error) {
+      toast({
+        title: "Oops!",
+        description: "Something went wrong. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return <section className={cn("bg-background text-foreground", "pt-8 sm:pt-10 md:pt-12 pb-0 px-4", "overflow-hidden")}>
       <div className="mx-auto flex max-w-6xl flex-col gap-8 sm:gap-12">
         <div className="flex flex-col items-center gap-4 text-center sm:gap-8">
@@ -35,8 +71,50 @@ const Hero = () => {
             </Button>
           </div>
 
-          {/* Arcade Demo with Glow */}
-          <div className="relative pt-6 w-full max-w-5xl mx-auto">
+          {/* Mobile Email Capture - Only on Mobile */}
+          <div className="md:hidden w-full max-w-md mx-auto animate-appear opacity-0 delay-700">
+            <div className="bg-gradient-to-br from-primary/5 to-accent/5 border border-primary/20 rounded-2xl p-6 space-y-4">
+              <div className="flex items-center justify-center gap-2 text-primary">
+                <Sparkles className="h-5 w-5" />
+                <span className="text-sm font-semibold">Desktop App Only</span>
+              </div>
+              
+              <h3 className="text-xl font-semibold text-center">
+                Get the Download Link in Your Inbox
+              </h3>
+              
+              <p className="text-sm text-muted-foreground text-center leading-relaxed">
+                You're on mobile, but Ormozy works on desktop. Drop your email and we'll send you the link to download it later on your computer. 
+                <span className="block mt-2 font-medium text-foreground">
+                  No spam. Just the app you need. 💙
+                </span>
+              </p>
+
+              <form onSubmit={handleEmailSubmit} className="flex flex-col gap-3">
+                <Input
+                  type="email"
+                  placeholder="your@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="h-12 text-base"
+                  disabled={isLoading}
+                />
+                <Button 
+                  type="submit" 
+                  size="lg" 
+                  className="w-full h-12 text-base"
+                  disabled={isLoading}
+                >
+                  <Mail className="mr-2 h-5 w-5" />
+                  {isLoading ? "Sending..." : "Send Me the Link"}
+                </Button>
+              </form>
+            </div>
+          </div>
+
+          {/* Arcade Demo with Glow - Hidden on Mobile */}
+          <div className="hidden md:block relative pt-6 w-full max-w-5xl mx-auto">
             <Glow variant="top" className="animate-appear-zoom opacity-0 delay-1000" />
             <div className="animate-appear opacity-0 delay-700 relative z-20" style={{
             position: "relative",
