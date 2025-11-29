@@ -6,7 +6,7 @@ const Comparison = () => {
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12 md:mb-16">
-          <h2 className="text-2xl md:text-5xl lg:text-6xl font-semibold mb-6">
+          <h2 className="text-2xl md:text-6xl lg:text-7xl font-semibold mb-6">
             Why pay for time tracking?
           </h2>
         </div>
