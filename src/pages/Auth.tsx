@@ -26,17 +26,17 @@ const Auth = () => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
         console.log('Existing session found');
-        // Always navigate to dashboard, keeping user logged in
-        navigate("/dashboard");
         
-        // If there's a redirect URI from Electron app, send tokens in background
+        // If there's a redirect URI from Electron app, redirect immediately with tokens
         if (currentRedirectUri && currentRedirectUri.startsWith('ormozy://')) {
-          console.log('Sending tokens to Electron app');
+          console.log('Redirecting to Electron app with tokens');
           const accessToken = session.access_token;
           const refreshToken = session.refresh_token;
-          // Open the Electron app link in a hidden iframe or new window
-          const link = `${currentRedirectUri}?access_token=${encodeURIComponent(accessToken)}&refresh_token=${encodeURIComponent(refreshToken)}`;
-          window.open(link, '_blank');
+          const callbackUrl = `${currentRedirectUri}?access_token=${encodeURIComponent(accessToken)}&refresh_token=${encodeURIComponent(refreshToken)}`;
+          window.location.href = callbackUrl;
+        } else {
+          // No redirect URI, navigate to dashboard
+          navigate("/dashboard");
         }
       }
     });
@@ -52,17 +52,17 @@ const Auth = () => {
         
         console.log('User signed in. Redirect URI:', redirectUriFromUrl);
         
-        // Always navigate to dashboard, keeping user logged in
-        console.log('Navigating to dashboard');
-        navigate("/dashboard");
-        
-        // If there's a custom redirect URI (from Electron app), send tokens in background
+        // If there's a redirect URI from Electron app, redirect with tokens
         if (redirectUriFromUrl && redirectUriFromUrl.startsWith('ormozy://')) {
-          console.log('Sending tokens to Electron app');
+          console.log('Redirecting to Electron app with tokens');
           const accessToken = session.access_token;
           const refreshToken = session.refresh_token;
-          const link = `${redirectUriFromUrl}?access_token=${encodeURIComponent(accessToken)}&refresh_token=${encodeURIComponent(refreshToken)}`;
-          window.open(link, '_blank');
+          const callbackUrl = `${redirectUriFromUrl}?access_token=${encodeURIComponent(accessToken)}&refresh_token=${encodeURIComponent(refreshToken)}`;
+          window.location.href = callbackUrl;
+        } else {
+          // No redirect URI, navigate to dashboard
+          console.log('Navigating to dashboard');
+          navigate("/dashboard");
         }
       }
     });
