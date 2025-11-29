@@ -70,9 +70,16 @@ const Hero = () => {
 
           {/* Email Capture - All Devices */}
           <div className="w-full max-w-md mx-auto animate-appear opacity-0 delay-700 space-y-4 mt-6">
-            {!email ? <>
+            {!email ? (
+              <>
                 <div className="flex justify-center">
-                  <ThreeDButton onClick={() => setEmail(" ")} variant="default" size="default" className="px-6 py-2.5 text-base font-medium" leadingIcon={IconArrowRight}>
+                  <ThreeDButton 
+                    onClick={() => setEmail(" ")} 
+                    variant="default" 
+                    size="default" 
+                    className="px-8 py-3 text-base font-medium" 
+                    leadingIcon={IconArrowRight}
+                  >
                     Send me the desktop app
                   </ThreeDButton>
                 </div>
@@ -81,13 +88,30 @@ const Hero = () => {
                   <p>Link sent to inbox</p>
                   <p>Open on desktop</p>
                 </div>
-              </> : <form onSubmit={handleEmailSubmit} className="flex flex-col gap-3 px-4">
-                <Input type="email" placeholder="your@email.com" value={email === " " ? "" : email} onChange={e => setEmail(e.target.value)} required className="h-12 text-base" disabled={isLoading} autoFocus />
-                <Button type="submit" size="lg" className="w-full h-12 text-base" disabled={isLoading}>
+              </>
+            ) : (
+              <form onSubmit={handleEmailSubmit} className="flex flex-col gap-3 px-4">
+                <Input 
+                  type="email" 
+                  placeholder="your@email.com" 
+                  value={email === " " ? "" : email} 
+                  onChange={(e) => setEmail(e.target.value)} 
+                  required 
+                  className="h-12 text-base" 
+                  disabled={isLoading} 
+                  autoFocus 
+                />
+                <Button 
+                  type="submit" 
+                  size="lg" 
+                  className="w-full h-12 text-base" 
+                  disabled={isLoading}
+                >
                   <Mail className="mr-2 h-5 w-5" />
                   {isLoading ? "Sending..." : "Send Me the Link"}
                 </Button>
-              </form>}
+              </form>
+            )}
           </div>
 
           {/* Arcade Demo with Glow - Hidden on Mobile */}
