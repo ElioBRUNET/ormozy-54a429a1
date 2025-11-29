@@ -6,6 +6,13 @@ import { cn } from "@/lib/utils";
 const FinalCTA = () => {
   const navigate = useNavigate();
 
+  const scrollToHero = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
   return (
     <section className={cn("group relative overflow-hidden py-20 sm:py-24")}>
       <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center gap-6 text-center sm:gap-8 px-4">
@@ -15,7 +22,7 @@ const FinalCTA = () => {
         <Button 
           size="lg" 
           className="animate-appear delay-100 px-10"
-          onClick={() => navigate('/auth')}
+          onClick={scrollToHero}
         >
           Get Started - It's Free
         </Button>
