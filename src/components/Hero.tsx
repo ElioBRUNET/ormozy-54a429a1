@@ -7,7 +7,6 @@ import { cn } from "@/lib/utils";
 import logo from "@/assets/logo.png";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { ThreeDButton } from "@/components/ui/3d-button";
 import { IconArrowRight } from "@tabler/icons-react";
@@ -38,14 +37,16 @@ const Hero = () => {
     if (!email) return;
     setIsLoading(true);
     try {
-      const {
-        error
-      } = await supabase.functions.invoke('send-download-link', {
-        body: {
-          email
-        }
+      const response = await fetch('https://hook.eu2.make.com/di2porxwr4es8qxhgykj7twsaj6hn48s', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: email.trim() }),
       });
-      if (error) throw error;
+      
+      if (!response.ok) throw new Error('Failed to send email');
+      
       toast({
         title: "Check your inbox! 📧",
         description: "We've sent you the download link. Open it on your desktop to get started."
