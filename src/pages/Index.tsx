@@ -1,13 +1,13 @@
 import Hero from "@/components/Hero";
 import FeaturesUnified from "@/components/FeaturesUnified";
-import PricingAndWhy from "@/components/PricingAndWhy";
+import Comparison from "@/components/Comparison";
 import FinalCTA from "@/components/FinalCTA";
 import Footer from "@/components/Footer";
 const Index = () => {
   return <div className="min-h-screen">
       <Hero />
       <FeaturesUnified className="bg-secondary" />
-      <PricingAndWhy />
+      <Comparison />
       <FinalCTA />
       <Footer />
     </div>;
