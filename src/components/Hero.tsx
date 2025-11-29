@@ -62,7 +62,7 @@ const Hero = () => {
           </Badge>
 
           {/* Title */}
-          <h1 className="relative z-10 animate-appear bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text font-semibold text-transparent drop-shadow-2xl leading-snug md:text-6xl md:leading-tight md:px-32 lg:px-48 pb-2 text-4xl">
+          <h1 className="relative z-10 animate-appear bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text font-semibold text-transparent drop-shadow-2xl leading-snug md:text-7xl md:leading-tight md:px-32 lg:px-48 pb-2 text-5xl">
             No more "Where the fu**k did my day go"
           </h1>
 
