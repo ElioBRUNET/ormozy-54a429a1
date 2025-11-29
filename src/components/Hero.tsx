@@ -13,38 +13,39 @@ import { ThreeDButton } from "@/components/ui/3d-button";
 import { IconArrowRight } from "@tabler/icons-react";
 const Hero = () => {
   const navigate = useNavigate();
-  const { toast } = useToast();
+  const {
+    toast
+  } = useToast();
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
-
     setIsLoading(true);
     try {
-      const { error } = await supabase.functions.invoke('send-download-link', {
-        body: { email }
+      const {
+        error
+      } = await supabase.functions.invoke('send-download-link', {
+        body: {
+          email
+        }
       });
-
       if (error) throw error;
-
       toast({
         title: "Check your inbox! 📧",
-        description: "We've sent you the download link. Open it on your desktop to get started.",
+        description: "We've sent you the download link. Open it on your desktop to get started."
       });
       setEmail("");
     } catch (error) {
       toast({
         title: "Oops!",
         description: "Something went wrong. Please try again.",
-        variant: "destructive",
+        variant: "destructive"
       });
     } finally {
       setIsLoading(false);
     }
   };
-
   return <section className={cn("bg-background text-foreground", "pt-8 sm:pt-10 md:pt-12 pb-0 px-4", "overflow-hidden relative")}>
       {/* Mobile Blue Gradient Shade - Top */}
       <div className="md:hidden absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-primary/20 via-primary/5 to-transparent animate-appear opacity-0 pointer-events-none" />
@@ -57,10 +58,7 @@ const Hero = () => {
           {/* Badge */}
           <Badge variant="outline" className="animate-appear gap-2 text-xs sm:text-sm">
             <span className="text-muted-foreground">For people who lose track of time</span>
-            <a href="#benefits" className="flex items-center gap-1">
-              Learn more
-              <ArrowRight className="h-3 w-3" />
-            </a>
+            
           </Badge>
 
           {/* Title */}
@@ -78,16 +76,9 @@ const Hero = () => {
 
           {/* Mobile Email Capture - Only on Mobile */}
           <div className="md:hidden w-full max-w-md mx-auto animate-appear opacity-0 delay-700 space-y-4">
-            {!email ? (
-              <>
+            {!email ? <>
                 <div className="flex justify-center">
-                  <ThreeDButton
-                    onClick={() => setEmail(" ")}
-                    variant="default"
-                    size="default"
-                    className="px-6 py-2.5 text-base font-medium"
-                    leadingIcon={IconArrowRight}
-                  >
+                  <ThreeDButton onClick={() => setEmail(" ")} variant="default" size="default" className="px-6 py-2.5 text-base font-medium" leadingIcon={IconArrowRight}>
                     Send me the desktop app
                   </ThreeDButton>
                 </div>
@@ -96,30 +87,13 @@ const Hero = () => {
                   <p>📧 Link sent to inbox</p>
                   <p>💻 Open on desktop</p>
                 </div>
-              </>
-            ) : (
-              <form onSubmit={handleEmailSubmit} className="flex flex-col gap-3 px-4">
-                <Input
-                  type="email"
-                  placeholder="your@email.com"
-                  value={email === " " ? "" : email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="h-12 text-base"
-                  disabled={isLoading}
-                  autoFocus
-                />
-                <Button 
-                  type="submit" 
-                  size="lg" 
-                  className="w-full h-12 text-base"
-                  disabled={isLoading}
-                >
+              </> : <form onSubmit={handleEmailSubmit} className="flex flex-col gap-3 px-4">
+                <Input type="email" placeholder="your@email.com" value={email === " " ? "" : email} onChange={e => setEmail(e.target.value)} required className="h-12 text-base" disabled={isLoading} autoFocus />
+                <Button type="submit" size="lg" className="w-full h-12 text-base" disabled={isLoading}>
                   <Mail className="mr-2 h-5 w-5" />
                   {isLoading ? "Sending..." : "Send Me the Link"}
                 </Button>
-              </form>
-            )}
+              </form>}
           </div>
 
           {/* Arcade Demo with Glow - Hidden on Mobile */}
