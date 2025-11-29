@@ -6,17 +6,8 @@ const Footer = () => {
     {
       title: "Product",
       links: [
-        { name: "Features", path: "#" },
-        { name: "Pricing", path: "#" },
-        { name: "FAQ", path: "#" }
-      ]
-    },
-    {
-      title: "Company",
-      links: [
-        { name: "About", path: "#" },
-        { name: "Blog", path: "#" },
-        { name: "Contact", path: "#" }
+        { name: "Features", path: "#features" },
+        { name: "Why Free", path: "#comparison" }
       ]
     },
     {
@@ -31,7 +22,7 @@ const Footer = () => {
   return (
     <footer className="bg-muted py-12 px-4">
       <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           <div>
             <img src={logo} alt="Ormozy" className="h-12 w-12 mb-4" />
             <p className="text-sm text-muted-foreground leading-relaxed">
