@@ -43,7 +43,7 @@ const Dashboard = () => {
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!session) {
-        navigate("/auth");
+        navigate("/auth", { replace: true });
       } else {
         setUser(session.user);
         setLoading(false);
@@ -60,7 +60,7 @@ const Dashboard = () => {
         setUser(null);
         setWorkLogs([]);
         setStreak(null);
-        navigate("/auth");
+        navigate("/auth", { replace: true });
       } else if (session) {
         setUser(session.user);
         fetchWorkLogs();
@@ -126,12 +126,22 @@ const Dashboard = () => {
   };
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    toast({
-      title: "Signed out",
-      description: "You have been successfully signed out.",
-    });
-    navigate("/auth");
+    try {
+      // Always clear local session so the web dashboard closes reliably
+      const { error } = await supabase.auth.signOut({ scope: "local" });
+      if (error) {
+        console.warn("Sign out error (continuing):", error.message);
+      }
+    } finally {
+      setUser(null);
+      setWorkLogs([]);
+      setStreak(null);
+      toast({
+        title: "Signed out",
+        description: "You have been successfully signed out.",
+      });
+      navigate("/auth", { replace: true });
+    }
   };
 
   if (loading) {
