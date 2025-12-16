@@ -26,54 +26,51 @@ const Auth = () => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
         console.log('Existing session found');
-        
-        // If there's a redirect URI from Electron app, redirect to app with tokens AND open dashboard
+
+        // If there's a redirect URI from Electron app, redirect to app with tokens.
+        // IMPORTANT: Do NOT navigate to the dashboard in this case, because the browser window was opened
+        // for the app login flow (user expects the app to handle the session).
         if (currentRedirectUri && currentRedirectUri.startsWith('ormozy://')) {
-          console.log('Redirecting to Electron app with tokens and opening dashboard');
+          console.log('Redirecting to Electron app with tokens');
           const accessToken = session.access_token;
           const refreshToken = session.refresh_token;
           const callbackUrl = `${currentRedirectUri}?access_token=${encodeURIComponent(accessToken)}&refresh_token=${encodeURIComponent(refreshToken)}`;
-          // Trigger the deep link to the Electron app
           window.location.href = callbackUrl;
-          // Navigate to dashboard after a short delay (deep link triggers immediately)
-          setTimeout(() => {
-            navigate("/dashboard");
-          }, 100);
-        } else {
-          // No redirect URI, navigate to dashboard
-          navigate("/dashboard");
+          return;
         }
+
+        // No redirect URI, navigate to dashboard
+        navigate("/dashboard");
       }
     });
 
     // Listen for auth changes (handles OAuth callback and email/password login)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
       console.log('Auth state changed:', event);
-      
+
       if (event === 'SIGNED_IN' && session) {
         // Re-read redirect_uri from current URL
         const urlParams = new URLSearchParams(window.location.search);
         const redirectUriFromUrl = urlParams.get('redirect_uri');
-        
+
         console.log('User signed in. Redirect URI:', redirectUriFromUrl);
-        
-        // If there's a redirect URI from Electron app, redirect to app with tokens AND open dashboard
+
+        // If there's a redirect URI from Electron app, redirect to app with tokens.
+        // IMPORTANT: Do NOT navigate to the dashboard in this case.
         if (redirectUriFromUrl && redirectUriFromUrl.startsWith('ormozy://')) {
-          console.log('Redirecting to Electron app with tokens and opening dashboard');
+          console.log('Redirecting to Electron app with tokens');
           const accessToken = session.access_token;
           const refreshToken = session.refresh_token;
           const callbackUrl = `${redirectUriFromUrl}?access_token=${encodeURIComponent(accessToken)}&refresh_token=${encodeURIComponent(refreshToken)}`;
-          // Trigger the deep link to the Electron app
           window.location.href = callbackUrl;
-          // Navigate to dashboard after a short delay (deep link triggers immediately)
-          setTimeout(() => {
-            navigate("/dashboard");
-          }, 100);
-        } else {
-          // No redirect URI, navigate to dashboard
-          console.log('Navigating to dashboard');
-          navigate("/dashboard");
+          return;
         }
+
+        // No redirect URI, navigate to dashboard
+        console.log('Navigating to dashboard');
+        navigate("/dashboard");
       }
     });
 
