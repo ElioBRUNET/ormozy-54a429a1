@@ -53,9 +53,15 @@ const Dashboard = () => {
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (!session) {
+      console.log('Dashboard auth state changed:', event);
+      
+      if (event === 'SIGNED_OUT' || !session) {
+        // Clear state and redirect to auth
+        setUser(null);
+        setWorkLogs([]);
+        setStreak(null);
         navigate("/auth");
-      } else {
+      } else if (session) {
         setUser(session.user);
         fetchWorkLogs();
         fetchStreak();
