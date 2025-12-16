@@ -4,11 +4,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { LogOut, Calendar as CalendarIcon, Clock, Activity, Flame } from "lucide-react";
+import { LogOut, Calendar as CalendarIcon, Clock, Activity, Flame, Bug } from "lucide-react";
 import logo from "@/assets/logo.webp";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
 import { format, startOfDay, endOfDay, differenceInDays } from "date-fns";
 import { cn } from "@/lib/utils";
 
@@ -37,6 +39,9 @@ const Dashboard = () => {
   const [loadingLogs, setLoadingLogs] = useState(true);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [streak, setStreak] = useState<UserStreak | null>(null);
+  const [bugReport, setBugReport] = useState("");
+  const [bugDialogOpen, setBugDialogOpen] = useState(false);
+  const [sendingBug, setSendingBug] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -144,6 +149,59 @@ const Dashboard = () => {
     }
   };
 
+  const handleBugReport = async () => {
+    const trimmedMessage = bugReport.trim();
+    if (!trimmedMessage) {
+      toast({
+        title: "Error",
+        description: "Please describe the bug before submitting.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (trimmedMessage.length > 2000) {
+      toast({
+        title: "Error",
+        description: "Bug report must be less than 2000 characters.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setSendingBug(true);
+    try {
+      const response = await fetch("https://hook.eu2.make.com/hjnwz9if7sc87o1b5sqz1kdht4zke71c", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: trimmedMessage,
+          userEmail: user?.email || "unknown",
+          timestamp: new Date().toISOString(),
+        }),
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Bug reported",
+          description: "Thank you for your feedback!",
+        });
+        setBugReport("");
+        setBugDialogOpen(false);
+      } else {
+        throw new Error("Failed to send bug report");
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to send bug report. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setSendingBug(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
@@ -187,8 +245,41 @@ const Dashboard = () => {
           <div>
             <img src={logo} alt="Ormozy" className="h-8" />
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
             <span className="text-sm text-muted-foreground hidden sm:block">{user?.email}</span>
+            <Dialog open={bugDialogOpen} onOpenChange={setBugDialogOpen}>
+              <DialogTrigger asChild>
+                <Button variant="outline" size="sm" className="gap-2">
+                  <Bug className="h-4 w-4" />
+                  <span className="hidden sm:inline">Report Bug</span>
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Report a Bug</DialogTitle>
+                </DialogHeader>
+                <div className="py-4">
+                  <Textarea
+                    placeholder="Describe the bug you encountered..."
+                    value={bugReport}
+                    onChange={(e) => setBugReport(e.target.value)}
+                    className="min-h-[120px]"
+                    maxLength={2000}
+                  />
+                  <p className="text-xs text-muted-foreground mt-2">
+                    {bugReport.length}/2000 characters
+                  </p>
+                </div>
+                <DialogFooter>
+                  <DialogClose asChild>
+                    <Button variant="outline">Cancel</Button>
+                  </DialogClose>
+                  <Button onClick={handleBugReport} disabled={sendingBug}>
+                    {sendingBug ? "Sending..." : "Submit"}
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
             <Button variant="ghost" size="icon" onClick={handleSignOut} title="Sign Out">
               <LogOut className="h-5 w-5" />
             </Button>
