@@ -18,57 +18,50 @@ const Auth = () => {
   const redirectUri = searchParams.get('redirect_uri');
 
   useEffect(() => {
-    // Get fresh redirect_uri from URL on each render
     const currentRedirectUri = searchParams.get('redirect_uri');
     console.log('Auth page loaded. Redirect URI:', currentRedirectUri);
 
-    // Check if user is already logged in
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        console.log('Existing session found');
-
-        // If there's a redirect URI from Electron app, redirect to app with tokens.
-        // IMPORTANT: Do NOT navigate to the dashboard in this case, because the browser window was opened
-        // for the app login flow (user expects the app to handle the session).
-        if (currentRedirectUri && currentRedirectUri.startsWith('ormozy://')) {
-          console.log('Redirecting to Electron app with tokens');
-          const accessToken = session.access_token;
-          const refreshToken = session.refresh_token;
-          const callbackUrl = `${currentRedirectUri}?access_token=${encodeURIComponent(accessToken)}&refresh_token=${encodeURIComponent(refreshToken)}`;
-          window.location.href = callbackUrl;
-          return;
+    // If redirect_uri is present (app login flow), always show login form - don't auto-redirect
+    if (currentRedirectUri && currentRedirectUri.startsWith('ormozy://')) {
+      console.log('App login flow detected - showing login form');
+      // Don't check for existing session, let user log in fresh
+    } else {
+      // Normal web flow - check if user is already logged in
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        if (session) {
+          console.log('Existing session found, redirecting to dashboard');
+          navigate("/dashboard");
         }
+      });
+    }
 
-        // No redirect URI, navigate to dashboard
-        navigate("/dashboard");
-      }
-    });
-
-    // Listen for auth changes (handles OAuth callback and email/password login)
+    // Listen for auth changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
       console.log('Auth state changed:', event);
 
-      // Handle both SIGNED_IN and INITIAL_SESSION (for OAuth callback)
       if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && session) {
-        // Re-read redirect_uri from current URL
         const urlParams = new URLSearchParams(window.location.search);
         const redirectUriFromUrl = urlParams.get('redirect_uri');
 
         console.log('User signed in. Redirect URI:', redirectUriFromUrl);
 
-        // If there's a redirect URI from Electron app, redirect to app with tokens.
+        // If app login flow, send tokens to app
         if (redirectUriFromUrl && redirectUriFromUrl.startsWith('ormozy://')) {
-          console.log('Redirecting to Electron app with tokens');
+          console.log('Sending tokens to Electron app');
           const accessToken = session.access_token;
           const refreshToken = session.refresh_token;
           const callbackUrl = `${redirectUriFromUrl}?access_token=${encodeURIComponent(accessToken)}&refresh_token=${encodeURIComponent(refreshToken)}`;
           window.location.href = callbackUrl;
+          // After triggering deep link, navigate to dashboard
+          setTimeout(() => {
+            navigate("/dashboard");
+          }, 100);
           return;
         }
 
-        // No redirect URI, navigate to dashboard (only on SIGNED_IN to avoid double navigation)
+        // Normal web flow - go to dashboard
         if (event === 'SIGNED_IN') {
           console.log('Navigating to dashboard');
           navigate("/dashboard");
