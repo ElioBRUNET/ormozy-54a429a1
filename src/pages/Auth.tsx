@@ -50,7 +50,8 @@ const Auth = () => {
     } = supabase.auth.onAuthStateChange((event, session) => {
       console.log('Auth state changed:', event);
 
-      if (event === 'SIGNED_IN' && session) {
+      // Handle both SIGNED_IN and INITIAL_SESSION (for OAuth callback)
+      if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && session) {
         // Re-read redirect_uri from current URL
         const urlParams = new URLSearchParams(window.location.search);
         const redirectUriFromUrl = urlParams.get('redirect_uri');
@@ -58,7 +59,6 @@ const Auth = () => {
         console.log('User signed in. Redirect URI:', redirectUriFromUrl);
 
         // If there's a redirect URI from Electron app, redirect to app with tokens.
-        // IMPORTANT: Do NOT navigate to the dashboard in this case.
         if (redirectUriFromUrl && redirectUriFromUrl.startsWith('ormozy://')) {
           console.log('Redirecting to Electron app with tokens');
           const accessToken = session.access_token;
@@ -68,9 +68,11 @@ const Auth = () => {
           return;
         }
 
-        // No redirect URI, navigate to dashboard
-        console.log('Navigating to dashboard');
-        navigate("/dashboard");
+        // No redirect URI, navigate to dashboard (only on SIGNED_IN to avoid double navigation)
+        if (event === 'SIGNED_IN') {
+          console.log('Navigating to dashboard');
+          navigate("/dashboard");
+        }
       }
     });
 
