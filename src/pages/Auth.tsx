@@ -27,13 +27,18 @@ const Auth = () => {
       if (session) {
         console.log('Existing session found');
         
-        // If there's a redirect URI from Electron app, redirect immediately with tokens
+        // If there's a redirect URI from Electron app, redirect to app with tokens AND open dashboard
         if (currentRedirectUri && currentRedirectUri.startsWith('ormozy://')) {
-          console.log('Redirecting to Electron app with tokens');
+          console.log('Redirecting to Electron app with tokens and opening dashboard');
           const accessToken = session.access_token;
           const refreshToken = session.refresh_token;
           const callbackUrl = `${currentRedirectUri}?access_token=${encodeURIComponent(accessToken)}&refresh_token=${encodeURIComponent(refreshToken)}`;
+          // Trigger the deep link to the Electron app
           window.location.href = callbackUrl;
+          // Navigate to dashboard after a short delay (deep link triggers immediately)
+          setTimeout(() => {
+            navigate("/dashboard");
+          }, 100);
         } else {
           // No redirect URI, navigate to dashboard
           navigate("/dashboard");
@@ -52,13 +57,18 @@ const Auth = () => {
         
         console.log('User signed in. Redirect URI:', redirectUriFromUrl);
         
-        // If there's a redirect URI from Electron app, redirect with tokens
+        // If there's a redirect URI from Electron app, redirect to app with tokens AND open dashboard
         if (redirectUriFromUrl && redirectUriFromUrl.startsWith('ormozy://')) {
-          console.log('Redirecting to Electron app with tokens');
+          console.log('Redirecting to Electron app with tokens and opening dashboard');
           const accessToken = session.access_token;
           const refreshToken = session.refresh_token;
           const callbackUrl = `${redirectUriFromUrl}?access_token=${encodeURIComponent(accessToken)}&refresh_token=${encodeURIComponent(refreshToken)}`;
+          // Trigger the deep link to the Electron app
           window.location.href = callbackUrl;
+          // Navigate to dashboard after a short delay (deep link triggers immediately)
+          setTimeout(() => {
+            navigate("/dashboard");
+          }, 100);
         } else {
           // No redirect URI, navigate to dashboard
           console.log('Navigating to dashboard');
