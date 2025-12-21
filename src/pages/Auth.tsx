@@ -45,31 +45,43 @@ const Auth = () => {
 
       if (!session) return;
 
+      console.log('Auth state change session object:', session);
+
       const urlParams = new URLSearchParams(window.location.search);
       const redirectUriFromUrl = urlParams.get('redirect_uri');
       const isAppFlow = redirectUriFromUrl?.startsWith('ormozy://');
       const hasTokens = Boolean(session.access_token && session.refresh_token);
 
+      const accessTokenPreview = session.access_token
+        ? `${session.access_token.slice(0, 20)}... (len=${session.access_token.length})`
+        : 'missing';
+      const refreshTokenPreview = session.refresh_token
+        ? `${session.refresh_token.slice(0, 20)}... (len=${session.refresh_token.length})`
+        : 'missing';
+
       console.log('User signed in. Redirect URI:', redirectUriFromUrl, 'Event:', event);
+      console.log('Access token preview:', accessTokenPreview);
+      console.log('Refresh token preview:', refreshTokenPreview);
 
       if (isAppFlow) {
         if (deepLinkTriggeredRef.current) {
-          console.log('Deep link already triggered. Skipping.');
+          console.log('Deep link already triggered. Skipping because guard is set.');
           return;
         }
 
         if (!hasTokens) {
-          console.warn('Missing tokens; will not trigger deep link.');
+          console.warn('Deep link skipped: missing tokens.');
           return;
         }
 
         if (event !== 'SIGNED_IN') {
-          console.log('Waiting for SIGNED_IN to trigger deep link. Current event:', event);
+          console.log('Deep link skipped: waiting for SIGNED_IN. Current event:', event);
           return;
         }
 
         deepLinkTriggeredRef.current = true;
         const callbackUrl = `${redirectUriFromUrl}?access_token=${encodeURIComponent(session.access_token)}&refresh_token=${encodeURIComponent(session.refresh_token)}`;
+        console.log('Deep link FINAL URL:', callbackUrl);
         console.log('Sending tokens to Electron app via deep link');
         window.location.href = callbackUrl;
         return;
