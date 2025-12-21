@@ -90,30 +90,82 @@ const Auth = () => {
 
         deepLinkTriggeredRef.current = true;
         
-        // Build callback URL with EXACT redirect_uri from app
-        const target = `${redirectUriFromUrl}?access_token=${encodeURIComponent(session.access_token)}&refresh_token=${encodeURIComponent(session.refresh_token)}`;
+        // CRITICAL: Get the freshest session to ensure tokens are complete
+        (async () => {
+          console.log('=== FETCHING FRESH SESSION ===');
+          const { data: { session: freshSession }, error } = await supabase.auth.getSession();
+          
+          if (error || !freshSession) {
+            console.error('Failed to get fresh session:', error);
+            toast({
+              title: "Erreur d'authentification",
+              description: "Impossible de récupérer la session. Veuillez réessayer.",
+              variant: "destructive",
+            });
+            deepLinkTriggeredRef.current = false;
+            return;
+          }
+
+          // Paranoid validation of tokens
+          const accessToken = freshSession.access_token;
+          const refreshToken = freshSession.refresh_token;
+          
+          console.log('=== TOKEN VALIDATION ===');
+          console.log('Access Token Length:', accessToken?.length);
+          console.log('Refresh Token Length:', refreshToken?.length);
+          console.log('Access Token Preview:', accessToken?.substring(0, 20) + '...');
+          console.log('Refresh Token Preview:', refreshToken?.substring(0, 20) + '...');
+          
+          // Validate token quality
+          if (!accessToken || accessToken.length < 50) {
+            console.error('INVALID ACCESS TOKEN: Too short or missing');
+            toast({
+              title: "Erreur de token",
+              description: "Access token invalide. Veuillez vous reconnecter.",
+              variant: "destructive",
+            });
+            deepLinkTriggeredRef.current = false;
+            return;
+          }
+          
+          if (!refreshToken || refreshToken.length < 50) {
+            console.error('INVALID REFRESH TOKEN: Too short or missing');
+            console.error('Refresh token value:', refreshToken);
+            toast({
+              title: "Erreur de token",
+              description: "Refresh token invalide. Veuillez vous reconnecter.",
+              variant: "destructive",
+            });
+            deepLinkTriggeredRef.current = false;
+            return;
+          }
+          
+          console.log('✅ Tokens validated successfully');
+          
+          // Build callback URL with EXACT redirect_uri from app and FRESH tokens
+          const target = `${redirectUriFromUrl}?access_token=${encodeURIComponent(accessToken)}&refresh_token=${encodeURIComponent(refreshToken)}`;
+          
+          console.log('=== DEEP LINK REDIRECT ===');
+          console.log('Original redirect_uri:', redirectUriFromUrl);
+          console.log('Final target URL (first 100 chars):', target.substring(0, 100) + '...');
+          console.log('========================');
+          
+          // Clean up localStorage
+          localStorage.removeItem('ormozy_redirect_uri');
+          
+          // Show success message before redirecting
+          toast({
+            title: "Authentification réussie !",
+            description: "Retour vers l'application...",
+            duration: 3000,
+          });
+          
+          // Small delay to let the toast show
+          setTimeout(() => {
+            window.location.href = target;
+          }, 500);
+        })();
         
-        console.log('=== DEEP LINK REDIRECT ===');
-        console.log('Original redirect_uri:', redirectUriFromUrl);
-        console.log('Final target URL:', target);
-        console.log('Access token length:', session.access_token?.length);
-        console.log('Refresh token length:', session.refresh_token?.length);
-        console.log('========================');
-        
-        // Clean up localStorage
-        localStorage.removeItem('ormozy_redirect_uri');
-        
-        // Show success message before redirecting
-        toast({
-          title: "Authentification réussie !",
-          description: "Retour vers l'application...",
-          duration: 3000,
-        });
-        
-        // Small delay to let the toast show
-        setTimeout(() => {
-          window.location.href = target;
-        }, 500);
         return;
       }
 
