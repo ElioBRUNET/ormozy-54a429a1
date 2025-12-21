@@ -21,11 +21,9 @@ const Auth = () => {
 
   useEffect(() => {
     const currentRedirectUri = searchParams.get('redirect_uri');
-    console.log('Auth page loaded. Redirect URI:', currentRedirectUri);
 
     // Store redirect_uri in localStorage to persist through OAuth flow
     if (currentRedirectUri && currentRedirectUri.startsWith('ormozy://')) {
-      console.log('App login flow detected - storing redirect_uri:', currentRedirectUri);
       localStorage.setItem('ormozy_redirect_uri', currentRedirectUri);
       // Don't check for existing session, let user log in fresh
     } else {
@@ -34,7 +32,6 @@ const Auth = () => {
       // Normal web flow - check if user is already logged in
       supabase.auth.getSession().then(({ data: { session } }) => {
         if (session) {
-          console.log('Existing session found, redirecting to dashboard');
           navigate("/dashboard");
         }
       });
@@ -44,11 +41,7 @@ const Auth = () => {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log('Auth state changed:', event);
-
       if (!session) return;
-
-      console.log('Auth state change session object:', session);
 
       // Get redirect_uri from localStorage (preferred) or URL params
       const storedRedirectUri = localStorage.getItem('ormozy_redirect_uri');
@@ -56,49 +49,28 @@ const Auth = () => {
       const redirectUriFromUrl = storedRedirectUri || urlParams.get('redirect_uri');
       const isAppFlow = redirectUriFromUrl?.startsWith('ormozy://');
       const hasTokens = Boolean(session.access_token && session.refresh_token);
-      
-      console.log('Stored redirect_uri:', storedRedirectUri);
-      console.log('URL redirect_uri:', urlParams.get('redirect_uri'));
-      console.log('Final redirect_uri to use:', redirectUriFromUrl);
-
-      const accessTokenPreview = session.access_token
-        ? `${session.access_token.slice(0, 20)}... (len=${session.access_token.length})`
-        : 'missing';
-      const refreshTokenPreview = session.refresh_token
-        ? `${session.refresh_token.slice(0, 20)}... (len=${session.refresh_token.length})`
-        : 'missing';
-
-      console.log('User signed in. Redirect URI:', redirectUriFromUrl, 'Event:', event);
-      console.log('Access token preview:', accessTokenPreview);
-      console.log('Refresh token preview:', refreshTokenPreview);
 
       if (isAppFlow) {
         if (deepLinkTriggeredRef.current) {
-          console.log('Deep link already triggered. Skipping because guard is set.');
           return;
         }
 
         if (!hasTokens) {
-          console.warn('Deep link skipped: missing tokens.');
           return;
         }
 
         // Accept both SIGNED_IN and INITIAL_SESSION events
         if (event !== 'SIGNED_IN' && event !== 'INITIAL_SESSION') {
-          console.log('Deep link skipped: waiting for SIGNED_IN or INITIAL_SESSION. Current event:', event);
           return;
         }
 
-        console.log(`✅ Triggering deep link redirect on event: ${event}`);
         deepLinkTriggeredRef.current = true;
         
-        // CRITICAL: Get the freshest session to ensure tokens are complete
+        // Get the freshest session to ensure tokens are complete
         (async () => {
-          console.log('=== FETCHING FRESH SESSION ===');
           const { data: { session: freshSession }, error } = await supabase.auth.getSession();
           
           if (error || !freshSession) {
-            console.error('Failed to get fresh session:', error);
             toast({
               title: "Erreur d'authentification",
               description: "Impossible de récupérer la session. Veuillez réessayer.",
@@ -108,29 +80,11 @@ const Auth = () => {
             return;
           }
 
-          // DEBUG: Log complete session object to identify token sources
-          console.log('=== FULL SESSION OBJECT ===');
-          console.log('Full Session Object:', JSON.stringify(freshSession, null, 2));
-          console.log('Session keys:', Object.keys(freshSession));
-          console.log('===========================');
-
-          // Validation of tokens existence only
           const accessToken = freshSession.access_token;
           const refreshToken = freshSession.refresh_token;
           
-          console.log('=== READING TOKEN PROPERTIES ===');
-          console.log('Reading freshSession.access_token:', typeof accessToken, accessToken?.substring(0, 30));
-          console.log('Reading freshSession.refresh_token:', typeof refreshToken, refreshToken?.substring(0, 30));
-          
-          console.log('=== TOKEN VALIDATION ===');
-          console.log('Access Token Length:', accessToken?.length);
-          console.log('Refresh Token Length:', refreshToken?.length);
-          console.log('Access Token Preview:', accessToken?.substring(0, 20) + '...');
-          console.log('Refresh Token Preview:', refreshToken?.substring(0, 20) + '...');
-          
-          // Validate token existence (no length check)
+          // Validate token existence
           if (!accessToken) {
-            console.error('MISSING ACCESS TOKEN');
             toast({
               title: "Erreur de token",
               description: "Access token manquant. Veuillez vous reconnecter.",
@@ -141,8 +95,6 @@ const Auth = () => {
           }
           
           if (!refreshToken) {
-            console.error('MISSING REFRESH TOKEN');
-            console.error('Refresh token value:', refreshToken);
             toast({
               title: "Erreur de token",
               description: "Refresh token manquant. Veuillez vous reconnecter.",
@@ -152,15 +104,8 @@ const Auth = () => {
             return;
           }
           
-          console.log('✅ Tokens exist - passing to app');
-          
           // Build callback URL with EXACT redirect_uri from app and FRESH tokens
           const target = `${redirectUriFromUrl}?access_token=${encodeURIComponent(accessToken)}&refresh_token=${encodeURIComponent(refreshToken)}`;
-          
-          console.log('=== DEEP LINK REDIRECT ===');
-          console.log('Original redirect_uri:', redirectUriFromUrl);
-          console.log('Final target URL (first 100 chars):', target.substring(0, 100) + '...');
-          console.log('========================');
           
           // Clean up localStorage
           localStorage.removeItem('ormozy_redirect_uri');
@@ -184,7 +129,6 @@ const Auth = () => {
       // Normal web flow - go to dashboard once
       if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && !hasNavigatedRef.current) {
         hasNavigatedRef.current = true;
-        console.log('Navigating to dashboard');
         navigate("/dashboard");
       }
     });
@@ -204,8 +148,6 @@ const Auth = () => {
         });
 
         if (error) throw error;
-
-        console.log('Email login successful');
         
         // onAuthStateChange will handle the redirect
         toast({
@@ -250,14 +192,10 @@ const Auth = () => {
     try {
       const currentRedirectUri = searchParams.get('redirect_uri');
       
-      console.log('Starting Google OAuth. Redirect URI:', currentRedirectUri);
-      
       // Preserve redirect_uri through OAuth callback
       const finalRedirectTo = currentRedirectUri && currentRedirectUri.startsWith('ormozy://')
         ? `${window.location.origin}/auth?redirect_uri=${encodeURIComponent(currentRedirectUri)}`
         : `${window.location.origin}/dashboard`;
-      
-      console.log('OAuth redirectTo:', finalRedirectTo);
       
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
