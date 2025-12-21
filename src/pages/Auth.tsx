@@ -83,11 +83,13 @@ const Auth = () => {
           return;
         }
 
-        if (event !== 'SIGNED_IN') {
-          console.log('Deep link skipped: waiting for SIGNED_IN. Current event:', event);
+        // Accept both SIGNED_IN and INITIAL_SESSION events
+        if (event !== 'SIGNED_IN' && event !== 'INITIAL_SESSION') {
+          console.log('Deep link skipped: waiting for SIGNED_IN or INITIAL_SESSION. Current event:', event);
           return;
         }
 
+        console.log(`✅ Triggering deep link redirect on event: ${event}`);
         deepLinkTriggeredRef.current = true;
         
         // CRITICAL: Get the freshest session to ensure tokens are complete
