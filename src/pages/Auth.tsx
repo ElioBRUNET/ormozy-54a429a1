@@ -106,7 +106,7 @@ const Auth = () => {
             return;
           }
 
-          // Paranoid validation of tokens
+          // Validation of tokens existence only
           const accessToken = freshSession.access_token;
           const refreshToken = freshSession.refresh_token;
           
@@ -116,31 +116,31 @@ const Auth = () => {
           console.log('Access Token Preview:', accessToken?.substring(0, 20) + '...');
           console.log('Refresh Token Preview:', refreshToken?.substring(0, 20) + '...');
           
-          // Validate token quality
-          if (!accessToken || accessToken.length < 50) {
-            console.error('INVALID ACCESS TOKEN: Too short or missing');
+          // Validate token existence (no length check)
+          if (!accessToken) {
+            console.error('MISSING ACCESS TOKEN');
             toast({
               title: "Erreur de token",
-              description: "Access token invalide. Veuillez vous reconnecter.",
+              description: "Access token manquant. Veuillez vous reconnecter.",
               variant: "destructive",
             });
             deepLinkTriggeredRef.current = false;
             return;
           }
           
-          if (!refreshToken || refreshToken.length < 50) {
-            console.error('INVALID REFRESH TOKEN: Too short or missing');
+          if (!refreshToken) {
+            console.error('MISSING REFRESH TOKEN');
             console.error('Refresh token value:', refreshToken);
             toast({
               title: "Erreur de token",
-              description: "Refresh token invalide. Veuillez vous reconnecter.",
+              description: "Refresh token manquant. Veuillez vous reconnecter.",
               variant: "destructive",
             });
             deepLinkTriggeredRef.current = false;
             return;
           }
           
-          console.log('✅ Tokens validated successfully');
+          console.log('✅ Tokens exist - passing to app');
           
           // Build callback URL with EXACT redirect_uri from app and FRESH tokens
           const target = `${redirectUriFromUrl}?access_token=${encodeURIComponent(accessToken)}&refresh_token=${encodeURIComponent(refreshToken)}`;
