@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,8 @@ const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const deepLinkTriggeredRef = useRef(false);
+  const hasNavigatedRef = useRef(false);
   const navigate = useNavigate();
   const { toast } = useToast();
   const [searchParams] = useSearchParams();
@@ -41,31 +43,43 @@ const Auth = () => {
     } = supabase.auth.onAuthStateChange((event, session) => {
       console.log('Auth state changed:', event);
 
-      if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && session) {
-        const urlParams = new URLSearchParams(window.location.search);
-        const redirectUriFromUrl = urlParams.get('redirect_uri');
+      if (!session) return;
 
-        console.log('User signed in. Redirect URI:', redirectUriFromUrl);
+      const urlParams = new URLSearchParams(window.location.search);
+      const redirectUriFromUrl = urlParams.get('redirect_uri');
+      const isAppFlow = redirectUriFromUrl?.startsWith('ormozy://');
+      const hasTokens = Boolean(session.access_token && session.refresh_token);
 
-        // If app login flow, send tokens to app
-        if (redirectUriFromUrl && redirectUriFromUrl.startsWith('ormozy://')) {
-          console.log('Sending tokens to Electron app');
-          const accessToken = session.access_token;
-          const refreshToken = session.refresh_token;
-          const callbackUrl = `${redirectUriFromUrl}?access_token=${encodeURIComponent(accessToken)}&refresh_token=${encodeURIComponent(refreshToken)}`;
-          window.location.href = callbackUrl;
-          // After triggering deep link, navigate to dashboard
-          setTimeout(() => {
-            navigate("/dashboard");
-          }, 100);
+      console.log('User signed in. Redirect URI:', redirectUriFromUrl, 'Event:', event);
+
+      if (isAppFlow) {
+        if (deepLinkTriggeredRef.current) {
+          console.log('Deep link already triggered. Skipping.');
           return;
         }
 
-        // Normal web flow - go to dashboard
-        if (event === 'SIGNED_IN') {
-          console.log('Navigating to dashboard');
-          navigate("/dashboard");
+        if (!hasTokens) {
+          console.warn('Missing tokens; will not trigger deep link.');
+          return;
         }
+
+        if (event !== 'SIGNED_IN') {
+          console.log('Waiting for SIGNED_IN to trigger deep link. Current event:', event);
+          return;
+        }
+
+        deepLinkTriggeredRef.current = true;
+        const callbackUrl = `${redirectUriFromUrl}?access_token=${encodeURIComponent(session.access_token)}&refresh_token=${encodeURIComponent(session.refresh_token)}`;
+        console.log('Sending tokens to Electron app via deep link');
+        window.location.href = callbackUrl;
+        return;
+      }
+
+      // Normal web flow - go to dashboard once
+      if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && !hasNavigatedRef.current) {
+        hasNavigatedRef.current = true;
+        console.log('Navigating to dashboard');
+        navigate("/dashboard");
       }
     });
 
