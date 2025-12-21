@@ -23,11 +23,14 @@ const Auth = () => {
     const currentRedirectUri = searchParams.get('redirect_uri');
     console.log('Auth page loaded. Redirect URI:', currentRedirectUri);
 
-    // If redirect_uri is present (app login flow), always show login form - don't auto-redirect
+    // Store redirect_uri in localStorage to persist through OAuth flow
     if (currentRedirectUri && currentRedirectUri.startsWith('ormozy://')) {
-      console.log('App login flow detected - showing login form');
+      console.log('App login flow detected - storing redirect_uri:', currentRedirectUri);
+      localStorage.setItem('ormozy_redirect_uri', currentRedirectUri);
       // Don't check for existing session, let user log in fresh
     } else {
+      // Clear any stored redirect_uri if not in app flow
+      localStorage.removeItem('ormozy_redirect_uri');
       // Normal web flow - check if user is already logged in
       supabase.auth.getSession().then(({ data: { session } }) => {
         if (session) {
@@ -47,10 +50,16 @@ const Auth = () => {
 
       console.log('Auth state change session object:', session);
 
+      // Get redirect_uri from localStorage (preferred) or URL params
+      const storedRedirectUri = localStorage.getItem('ormozy_redirect_uri');
       const urlParams = new URLSearchParams(window.location.search);
-      const redirectUriFromUrl = urlParams.get('redirect_uri');
+      const redirectUriFromUrl = storedRedirectUri || urlParams.get('redirect_uri');
       const isAppFlow = redirectUriFromUrl?.startsWith('ormozy://');
       const hasTokens = Boolean(session.access_token && session.refresh_token);
+      
+      console.log('Stored redirect_uri:', storedRedirectUri);
+      console.log('URL redirect_uri:', urlParams.get('redirect_uri'));
+      console.log('Final redirect_uri to use:', redirectUriFromUrl);
 
       const accessTokenPreview = session.access_token
         ? `${session.access_token.slice(0, 20)}... (len=${session.access_token.length})`
@@ -80,10 +89,31 @@ const Auth = () => {
         }
 
         deepLinkTriggeredRef.current = true;
-        const callbackUrl = `${redirectUriFromUrl}?access_token=${encodeURIComponent(session.access_token)}&refresh_token=${encodeURIComponent(session.refresh_token)}`;
-        console.log('Deep link FINAL URL:', callbackUrl);
-        console.log('Sending tokens to Electron app via deep link');
-        window.location.href = callbackUrl;
+        
+        // Build callback URL with EXACT redirect_uri from app
+        const target = `${redirectUriFromUrl}?access_token=${encodeURIComponent(session.access_token)}&refresh_token=${encodeURIComponent(session.refresh_token)}`;
+        
+        console.log('=== DEEP LINK REDIRECT ===');
+        console.log('Original redirect_uri:', redirectUriFromUrl);
+        console.log('Final target URL:', target);
+        console.log('Access token length:', session.access_token?.length);
+        console.log('Refresh token length:', session.refresh_token?.length);
+        console.log('========================');
+        
+        // Clean up localStorage
+        localStorage.removeItem('ormozy_redirect_uri');
+        
+        // Show success message before redirecting
+        toast({
+          title: "Authentification réussie !",
+          description: "Retour vers l'application...",
+          duration: 3000,
+        });
+        
+        // Small delay to let the toast show
+        setTimeout(() => {
+          window.location.href = target;
+        }, 500);
         return;
       }
 
