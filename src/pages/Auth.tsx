@@ -117,10 +117,15 @@ const Auth = () => {
             duration: 3000,
           });
           
-          // Small delay to let the toast show
+          // Redirect to app with tokens
           setTimeout(() => {
             window.location.href = target;
           }, 500);
+          
+          // Also redirect web page to dashboard after sending tokens to app
+          setTimeout(() => {
+            navigate("/dashboard");
+          }, 1000);
         })();
         
         return;
