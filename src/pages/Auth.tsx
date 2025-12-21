@@ -106,9 +106,19 @@ const Auth = () => {
             return;
           }
 
+          // DEBUG: Log complete session object to identify token sources
+          console.log('=== FULL SESSION OBJECT ===');
+          console.log('Full Session Object:', JSON.stringify(freshSession, null, 2));
+          console.log('Session keys:', Object.keys(freshSession));
+          console.log('===========================');
+
           // Validation of tokens existence only
           const accessToken = freshSession.access_token;
           const refreshToken = freshSession.refresh_token;
+          
+          console.log('=== READING TOKEN PROPERTIES ===');
+          console.log('Reading freshSession.access_token:', typeof accessToken, accessToken?.substring(0, 30));
+          console.log('Reading freshSession.refresh_token:', typeof refreshToken, refreshToken?.substring(0, 30));
           
           console.log('=== TOKEN VALIDATION ===');
           console.log('Access Token Length:', accessToken?.length);
